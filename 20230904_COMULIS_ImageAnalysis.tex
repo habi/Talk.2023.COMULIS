@@ -21,6 +21,8 @@
 \newcommand{\imageheight}{0.618\paperheight}% set global image height
 \newlength\imagescale% needed for scalebars
 \newcommand{\uct}{{\textmu}CT\xspace}% make our life easier
+\newcommand{\eg}{e.\,g.\xspace}%
+\newcommand{\ie}{i.\,e.\xspace}%
 
 \usepackage[backend=biber,
 	style=numeric,
@@ -39,6 +41,9 @@
 	\shadowcolor{ubRed}
 \usepackage{pgfplots}
 	\pgfplotsset{compat=newest}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{colortbl}
 \usepackage[detect-all=true,
 	range-phrase=--,
 	range-units=single,
@@ -48,8 +53,10 @@
 \usepackage[missing=main]{gitinfo2}% GitHub Actions don't pull in the commit hash, so we force the footer some lines down.
 \usepackage{xspace}
 \usepackage{ccicons}
+\usepackage[version=4]{mhchem}
 \usepackage{animate}
 \usepackage{fontawesome5}
+\usepackage{csquotes}
 \usepackage{lipsum}%for alignment testing
 \usepackage{datetime2}
 \usepackage{mathastext}
@@ -77,7 +84,7 @@
 	% Print out (short) link under image, with small text
 	\raisebox{-1.618ex}{%
 		\makebox[0pt][r]{%
-			\tiny\href{http://#1}{#1} #2%
+			\scriptsize\href{http://#1}{#1} #2%
 			}%
 		}%
 	}%
@@ -85,15 +92,15 @@
 	% Cite (an image from) a reference
 	\raisebox{-1.618ex}{%
 		\makebox[0pt][r]{%
-			\tiny Aus~\cite{#1}, #2%
+			\scriptsize From \cite{#1}, #2%
 			}%
 		}%
 	}%
-\newcommand{\sourcelink}[2]{%
+\newcommand{\sourcelink}[3]{%
 	% Make the source command an \href{link}{text}
 	\raisebox{-1.618ex}{%
 		\makebox[0pt][r]{%
-			\tiny\href{http://#1}{#2}%
+			\scriptsize\href{http://#1}{#2}, #3%
 			}%
 		}%
 	}%
@@ -186,29 +193,262 @@
 	\end{frame}%
 }
 
-\section{Introduction}
 \begin{frame}
+	\frametitle{\uct-group}
+	\begin{columns}
+		\begin{column}{0.61\linewidth}
+			\begin{itemize}
+				\item microangioCT~\cite{Hlushchuk2018}
+				\begin{itemize}
+					\item Angiogenesis: heart, musculature~\cite{Nording2021} and bones
+					\item Vasculature: (mouse) brain~\cite{Hlushchuk2020}, (human) nerve scaffolds~\cite{Wuthrich2020}, (human) skin flaps~\cite{Zubler2021} and tumors
+				\end{itemize}
+				\item Zebrafish musculature and gills~\cite{MesserliAaldijk2020}
+				\item (Lung) tumor detection and metastasis classification~\cite{Trappetti2021}
+				\item Collaborations with museums~\cite{Bochud2021} and scientist at UniBe~\cite{Halm2021} to scan a wide range of specimens
+				\item Automate \emph{all} the things!~\cite{Haberthuer2021, Haberthuer2023}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.37\linewidth}
+			\centering
+			\includegraphics<1>[width=\imagewidth]{./images/1172}%
+			\only<1>{\source{brukersupport.com}{}}
+			\includegraphics<2>[width=\imagewidth]{./images/1272}%
+			\only<2>{\source{bruker.com/skyscan1272}{}}
+			\includegraphics<3>[width=\imagewidth]{./images/2214}%
+			\only<3>{\source{bruker.com/skyscan2214}{}}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Overview}
+	\centering
+	\includegraphics[height=\imheight]{./images/MIC-AM_techniques}%
+	\sourcelink{https://anatomie.unibe.ch/tschanz}{Stefan Tschanz}{with permission}%
+\end{frame}
+
+\renewcommand{\imagewidth}{\columnwidth}
+\begin{frame}
+	\frametitle{History}
+	\begin{columns}
+		\begin{column}{0.49\linewidth}
+			\begin{itemize}
+				\item Long history
+				\begin{itemize}
+					\item \citeyear{Cormack1963}:~\citeauthor{Cormack1963} used a collimated \ce{^{60}Co} source and a Geiger counter as a detector~\cite{Cormack1963}%
+					\item 1976:~\citeauthor{Hounsfield1976a} worked on first clinical scanner~\cite{Hounsfield1976a}%
+					\item Nice overview by \citeauthor{Hsieh2003}~\cite{Hsieh2003}%
+				\end{itemize}%
+				\item<2-|handout:2-> CT scanner generations: First\uncover<3-|handout:3->{, second}\uncover<4|handout:4->{ and third}%
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.49\linewidth}
+			\centering
+			\includegraphics<1|handout:1>[height=\imageheight]{./images/ch8f2}%
+			\only<1|handout:1>{\sourcecite{Taubmann2018}{Figure 8.2}}%
+			\includegraphics<2|handout:2>[width=\imagewidth]{./images/History_Generation1}%
+			\only<2|handout:2>{\sourcecite{Hsieh2003}{Figure 1.12}}%
+			\includegraphics<3|handout:3>[width=\imagewidth]{./images/History_Generation2}%
+			\only<3|handout:3>{\sourcecite{Hsieh2003}{Figure 1.13}}%
+			\includegraphics<4|handout:4>[width=\imagewidth]{./images/History_Generation3}%
+			\only<4|handout:4>{\sourcecite{Hsieh2003}{Figure 1.14}}%
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\subsection{Interaction of x-rays with matter}
+\begin{frame}
+	\frametitle{X-ray interaction}
 	\begin{itemize}
-		\item Who are we
-		\item What do we do
-		\item What do I show?
+		\item \textquote[\cite{xrayphysics}]{X-rays interact with tissue in 2 main ways: photoelectric effect and Compton scatter.
+				To a first approximation, the photoelectric effect contributes to contrast while the Compton effect contributes to noise.
+				Both contribute to dose.}
 		\begin{itemize}
-			\item \uct
-			\item Data wrangling
-			\item Example of cichlids and/or teeth
+			\item Photoelectric absorption (\(\tau\)) is strongly dependent on the atomic number \(Z\) of the absorbing material: \(\tau\propto\frac{Z^4}{E^{3.5}}\)
+			\note{From \href{https://radiopaedia.org/articles/photoelectric-effect}{Radiopaedia.org}: Therefore if \(Z\) doubles, PEA will increase by a factor of 16 (\(2^4=16\)), and if \(E\) doubles PEA will be reduced by a factor of 11.
+				Small changes in \(Z\) and \(E\) can therefore significantly affect PEA.
+				This has practical implications in the field of radiation protection and is the reason why materials with a high \(Z\) such as lead (\(Z= 82\)) are useful shielding materials.
+				The dependence of PEA on \(Z\) and \(E\) means that it is the major contributor to beam attenuation up to approximately 30 keV when human tissues (\(Z=7.4\)) are irradiated.
+				At beam energies above this, the Compton effect predominates.}
+			\item Compton scattering is one of the principle forms of photon interaction and is directly proportional to the (electron \& physical) density of the material.
+				It does \emph{not} depend on the atomic number: \(\lambda' - \lambda = \frac{h}{m_e c}\left(1-\cos{\theta}\right)\)
+			\note{Where \(\lambda\) is the initial wavelength, \(\lambda'\) is the wavelength after scattering, \(h\) is the Planck constant, \(m_e\) is the electron rest mass, \(c\) is the speed of light, and \(\theta\) is the scattering angle.}
 		\end{itemize}
+		\item Lowering x-ray energy increases contrast
+		\item X-ray penetration decreases exponentially with sample thickness (\cite[\ie Beer-Lamberts law]{wiki:beer-lambert} \(I(t) = I_0 \, e^{-\alpha z}\)
 	\end{itemize}
 \end{frame}
 
-\section{(Micro-)Tomography}
 \begin{frame}
-	\begin{itemize}
-		\item History
-		\item Overview
-		\item Applications (c.f. Stefan Handschuh)
-		\item Some relevant stuff from the \uct-lecture, hinting at staining \emph{et al.}
-	\end{itemize}
+	\frametitle{Composition of biological tissues}
+	Tissue: content by mass percentage
+	\centering
+	\begin{table}%
+		\only<1>{%
+			\pgfplotstabletypeset[%
+				col sep=comma,% the seperator in our .csv file
+				display columns/0/.style={string type},%
+				% section 3.2 in pgfplotstable manual
+				every head row/.style={before row={\toprule}},%
+				every row no 0/.style={after row=\midrule},%
+				every last row/.style={after row=\bottomrule},%
+			]{./tables/tissue-composition.csv}%
+		}%
+		\only<2|handout:0>{%
+			\pgfplotstabletypeset[%
+				col sep=comma,% the seperator in our .csv file
+				display columns/0/.style={string type},%
+				every head row/.style={before row={\toprule}},%
+				every row no 0/.style={after row=\midrule},%
+				every last row/.style={after row=\bottomrule},%
+				% make certain cells ubRed, based on https://tex.stackexchange.com/a/296914/828
+				every row 1 column 2/.style={postproc cell content/.append style={/pgfplots/table/@cell content/.add={\cellcolor{ubRed!61.8}}{}}},%
+				every row 1 column 4/.style={postproc cell content/.append style={/pgfplots/table/@cell content/.add={\cellcolor{ubRed!61.8}}{}}},%
+				every row 6 column 6/.style={postproc cell content/.append style={/pgfplots/table/@cell content/.add={\cellcolor{ubRed!61.8}}{}}},%
+				every row 6 column 10/.style={postproc cell content/.append style={/pgfplots/table/@cell content/.add={\cellcolor{ubRed!61.8}}{}}}%
+			]{./tables/tissue-composition.csv}%
+		}%
+	\end{table}
+	\note{Bone, lean tissue, fat and air can be distinguished quite easily}
 \end{frame}
+
+\renewcommand{\imagewidth}{\columnwidth}
+\begin{frame}
+	\frametitle{Why \uct?}
+	\begin{columns}
+		\begin{column}{0.49\linewidth}
+			% https://www.cancerimagingarchive.net/nbia-search/?saved-cart=nbia-76761575299081509
+			\only<1-4|handout:1-4>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
+				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
+				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
+					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					%\draw[|-|,blue,thick] (0,200) -- (512,200) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{250.0096}{\milli\meter} (512px) TEMPORARY!};
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+				\end{tikzpicture}%
+			}%
+			\only<5|handout:0>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
+				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
+				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
+				\def\mag{5}% magnification of inset
+				\def\size{100}% size of inset
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale,spy using outlines={rectangle,magnification=\mag,size=\size,connect spies}]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
+					\spy [red] on (102,342) in node at (256,201) [anchor=center];
+					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+				\end{tikzpicture}%
+			}%
+			\renewcommand{\imagewidth}{0.1554\columnwidth}%
+			\only<6|handout:5>{%
+				\centering
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
+				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
+				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
+					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+				\end{tikzpicture}%
+			}%
+			\sourcecite{Clark2013}{Subject \emph{C3L-02465}}
+		\end{column}%
+		\begin{column}{0.49\linewidth}
+			\only<1|handout:1>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
+				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
+				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
+					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
+					%\draw[|-|,blue,thick] (0,746) -- (3295,746) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.2282}{\milli\meter} (3295px) TEMPORARY!};
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+				\end{tikzpicture}%
+			}%
+			\renewcommand{\imagewidth}{0.1\columnwidth}%
+			\only<2|handout:2>{%
+				\centering
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/54}%
+				\def\x{33}% scalebar-x starting at golden ratio of image width of 54px = 33
+				\def\y{22}% scalebar-y at 90% of image height of 24px = 22
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse_488umppx}};
+					% 54.000px = 26.3682mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					%\draw[|-|,blue,thick] (0,12) -- (54,12) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.3682}{\milli\meter} (54px) TEMPORARY!};
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+					%\draw[color=red, anchor=south west] (0,24) node [fill=white, semitransparent] {Legend} node {Legend};
+				\end{tikzpicture}%
+			}%
+			\renewcommand{\imagewidth}{\columnwidth}
+			\only<3|handout:3>{%
+				\centering
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/54}%
+				\def\x{33}% scalebar-x starting at golden ratio of image width of 54px = 33
+				\def\y{22}% scalebar-y at 90% of image height of 24px = 22
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse_488umppx}};
+					% 54.000px = 26.3682mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					%\draw[|-|,blue,thick] (0,12) -- (54,12) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.3682}{\milli\meter} (54px) TEMPORARY!};
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+10.24,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+					%\draw[color=red, anchor=south west] (0,24) node [fill=white, semitransparent] {Legend} node {Legend};
+				\end{tikzpicture}%
+			}%
+			\only<4|handout:4>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
+				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
+				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
+					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+				\end{tikzpicture}%
+			}%
+			\only<5|handout:0>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
+				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
+				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
+				\def\mag{5}% magnification of inset
+				\def\size{100}% size of inset
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale,spy using outlines={rectangle,magnification=\mag,size=\size,connect spies}]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
+					\spy [red] on (352,1116) in node at (1648,746) [anchor=center];
+					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+				\end{tikzpicture}%
+			}%
+			\only<6|handout:5>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
+				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
+				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
+					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+				\end{tikzpicture}%
+			}%
+		\end{column}
+	\end{columns}
+\end{frame}
+\note{The human head scan was downloaded from the \href{https://www.cancerimagingarchive.net}{Cancer Imaging Archive}.
+	We loaded the DICOM slices in Fiji, resliced it to show it from the side and then used to generate an MIP.
+	According to the DICOM tags, the voxel size is \SI{0.4883x0.4883x0.625}{\milli\meter\cubed}, the image size is 512\(\times\)512 pixels.
+	The mouse head is the same as shown in the early animation.
+	The files from the early animation were resized 0.25 times; here we used the original dataset (Mouse1265\_Skull\_Gaby\_TKI\_7\_96um\_Al05\_2K) for a reslice and the generation of the MIP.
+	The voxel size of the original data is 7.96 um, the image size is 3295\(\times\)1492 pixels.
+	}
 
 \section{Data wrangling by example}
 \begin{frame}
