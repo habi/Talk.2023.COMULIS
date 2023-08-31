@@ -21,8 +21,9 @@
 \newcommand{\imageheight}{0.618\paperheight}% set global image height
 \newlength\imagescale% needed for scalebars
 \newcommand{\uct}{{\textmu}CT\xspace}% make our life easier
+\newcommand{\eg}{e.\,g.\xspace}%
+\newcommand{\ie}{i.\,e.\xspace}%
 
-\usepackage[ngerman]{babel}
 \usepackage[backend=biber,
 	style=numeric,
 	backref=true,
@@ -40,6 +41,9 @@
 	\shadowcolor{ubRed}
 \usepackage{pgfplots}
 	\pgfplotsset{compat=newest}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{colortbl}
 \usepackage[detect-all=true,
 	range-phrase=--,
 	range-units=single,
@@ -49,8 +53,10 @@
 \usepackage[missing=main]{gitinfo2}% GitHub Actions don't pull in the commit hash, so we force the footer some lines down.
 \usepackage{xspace}
 \usepackage{ccicons}
+\usepackage[version=4]{mhchem}
 \usepackage{animate}
 \usepackage{fontawesome5}
+\usepackage{csquotes}
 \usepackage{lipsum}%for alignment testing
 \usepackage{datetime2}
 \usepackage{mathastext}
@@ -78,7 +84,7 @@
 	% Print out (short) link under image, with small text
 	\raisebox{-1.618ex}{%
 		\makebox[0pt][r]{%
-			\tiny\href{http://#1}{#1} #2%
+			\scriptsize\href{http://#1}{#1} #2%
 			}%
 		}%
 	}%
@@ -86,15 +92,15 @@
 	% Cite (an image from) a reference
 	\raisebox{-1.618ex}{%
 		\makebox[0pt][r]{%
-			\tiny Aus~\cite{#1}, #2%
+			\scriptsize From \cite{#1}, #2%
 			}%
 		}%
 	}%
-\newcommand{\sourcelink}[2]{%
+\newcommand{\sourcelink}[3]{%
 	% Make the source command an \href{link}{text}
 	\raisebox{-1.618ex}{%
 		\makebox[0pt][r]{%
-			\tiny\href{http://#1}{#2}%
+			\scriptsize\href{http://#1}{#2}, #3%
 			}%
 		}%
 	}%
@@ -117,24 +123,19 @@
 	\multiply\progressbar@tmpdim by \progressbar@tmpcounta%
 	\divide\progressbar@tmpdim by \progressbar@tmpcountb%
 	\par%
-		\mode<beamer>{%
-			\begin{tikzpicture}%
-				\draw[ubGrey] (0,0) -- ++ (\progressbar@pbwd,0);%
-				\draw[draw=ubRed,fill=ubGrey] (\the\dimexpr\progressbar@tmpdim-\progressbar@rcircle\relax,.5\progressbar@pbht) circle (\progressbar@rcircle);%
-			\end{tikzpicture}%
-			\hfill%
-			bit.ly/SHTuCT\xspace|\xspace v.\xspace\href{https://github.com/habi/Talk.2023.SHTSymposium/commit/\gitHash}{\gitAbbrevHash}\xspace|\xspace\insertframenumber/\inserttotalframenumber%
-			}%
-		\mode<handout>{%
-			bit.ly/SHTuCT\hfill|\hfill%
-			Handout: Created on \DTMnow\hfill|\hfill%
-			\insertframenumber/\inserttotalframenumber%
-			}%
-		\vspace{0.5ex}%
+	\begin{tikzpicture}%
+		\draw[ubGrey] (0,0) -- ++ (\progressbar@pbwd,0);%
+		\draw[draw=ubRed,fill=ubGrey] (\the\dimexpr\progressbar@tmpdim-\progressbar@rcircle\relax,.5\progressbar@pbht) circle (\progressbar@rcircle);%
+	\end{tikzpicture}%
+	\hfill bit.ly/cmls\xspace|\xspace%
+	v. \href{https://github.com/habi/Talk.2023.COMULIS/commit/\gitHash}{\gitAbbrevHash}\xspace|\xspace%
+	p.\xspace\insertframenumber/\inserttotalframenumber%
+	\hspace*{4ex}%
+	\vspace{0.5ex}%
 }
 \addtobeamertemplate{footline}{}%
 {%
-	\begin{beamercolorbox}[wd=\paperwidth,center]{white}%
+	\begin{beamercolorbox}[wd=\paperwidth,center]{green}%
 		\progressbar@progressbar%
 	\end{beamercolorbox}%
 }%
@@ -156,6 +157,15 @@
 % No parentheses around the (now empty) year: https://tex.stackexchange.com/a/147537/828
 \renewcommand{\bibopenparen}{\addcomma\addspace}
 \renewcommand{\bibcloseparen}{\addcomma\addspace}
+
+% Show current section at begin of sections, but only in presentation mode
+\mode<beamer>{%
+	\AtBeginSection[]{%
+		\begin{frame}{Contents}
+			\tableofcontents[currentsection,currentsubsection,hideothersubsections]
+		\end{frame}
+	}
+}
 
 % Redefine \footcite based on https://tex.stackexchange.com/a/453528/828
 \DeclareCiteCommand{\footcite}[\mkbibfootnote]{%
@@ -192,41 +202,526 @@
 	\end{frame}%
 }
 
-\section{Introduction}
 \begin{frame}
+	\frametitle{\uct-group}
+	\begin{columns}
+		\begin{column}{0.61\linewidth}
+			\begin{itemize}
+				\item microangioCT~\cite{Hlushchuk2018}
+				\begin{itemize}
+					\item Angiogenesis: heart, musculature~\cite{Nording2021} and bones
+					\item Vasculature: (mouse) brain~\cite{Hlushchuk2020}, (human) nerve scaffolds~\cite{Wuthrich2020}, (human) skin flaps~\cite{Zubler2021} and tumors
+				\end{itemize}
+				\item Zebrafish musculature and gills~\cite{MesserliAaldijk2020}
+				\item (Lung) tumor detection and metastasis classification~\cite{Trappetti2021}
+				\item Collaborations with museums~\cite{Bochud2021} and scientist at UniBe~\cite{Halm2021} to scan a wide range of specimens
+				\item Automate \emph{all} the things!~\cite{Haberthuer2021, Haberthuer2023}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.37\linewidth}
+			\centering
+			\includegraphics<1>[width=\imagewidth]{./images/1172}%
+			\only<1>{\source{brukersupport.com}{}}
+			\includegraphics<2>[width=\imagewidth]{./images/1272}%
+			\only<2>{\source{bruker.com/skyscan1272}{}}
+			\includegraphics<3>[width=\imagewidth]{./images/2214}%
+			\only<3>{\source{bruker.com/skyscan2214}{}}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Contents}
+	\tableofcontents
+\end{frame}
+
+\section{Overview}
+\begin{frame}
+	\frametitle{Overview}
+	\centering
+	\includegraphics[height=\imageheight]{./images/MIC-AM_techniques}%
+	\sourcelink{https://anatomie.unibe.ch/tschanz}{Stefan Tschanz}{with permission}%
+\end{frame}
+
+\subsection{History}
+\renewcommand{\imagewidth}{\columnwidth}
+\begin{frame}
+	\frametitle{History}
+	\begin{columns}
+		\begin{column}{0.49\linewidth}
+			\begin{itemize}
+				\item Long history
+				\begin{itemize}
+					\item \citeyear{Cormack1963}:~\citeauthor{Cormack1963} used a collimated \ce{^{60}Co} source and a Geiger counter as a detector~\cite{Cormack1963}%
+					\item 1976:~\citeauthor{Hounsfield1976a} worked on first clinical scanner~\cite{Hounsfield1976a}%
+					\item Nice overview by \citeauthor{Hsieh2003}~\cite{Hsieh2003}%
+				\end{itemize}%
+				\item<2-|handout:2-> CT scanner generations: First\uncover<3-|handout:3->{, second}\uncover<4|handout:4->{ and third}%
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.49\linewidth}
+			\centering
+			\includegraphics<1|handout:1>[height=\imageheight]{./images/ch8f2}%
+			\only<1|handout:1>{\sourcecite{Taubmann2018}{Figure 8.2}}%
+			\includegraphics<2|handout:2>[width=\imagewidth]{./images/History_Generation1}%
+			\only<2|handout:2>{\sourcecite{Hsieh2003}{Figure 1.12}}%
+			\includegraphics<3|handout:3>[width=\imagewidth]{./images/History_Generation2}%
+			\only<3|handout:3>{\sourcecite{Hsieh2003}{Figure 1.13}}%
+			\includegraphics<4|handout:4>[width=\imagewidth]{./images/History_Generation3}%
+			\only<4|handout:4>{\sourcecite{Hsieh2003}{Figure 1.14}}%
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\end{document}
+
+
+\subsection{Interaction of x-rays with matter}
+\begin{frame}
+	\frametitle{X-ray interaction}
 	\begin{itemize}
-		\item Who are we
-		\item What do we do
-		\item What do I show?
+		\item \textquote[\cite{xrayphysics}]{X-rays interact with tissue in 2 main ways: photoelectric effect and Compton scatter.
+				To a first approximation, the photoelectric effect contributes to contrast while the Compton effect contributes to noise.
+				Both contribute to dose.}
 		\begin{itemize}
-			\item \uct
-			\item Data wrangling
-			\item Example of cichlids and/or teeth
+			\item Photoelectric absorption (\(\tau\)) is strongly dependent on the atomic number \(Z\) of the absorbing material: \(\tau\propto\frac{Z^4}{E^{3.5}}\)
+			\note{From \href{https://radiopaedia.org/articles/photoelectric-effect}{Radiopaedia.org}: Therefore if \(Z\) doubles, PEA will increase by a factor of 16 (\(2^4=16\)), and if \(E\) doubles PEA will be reduced by a factor of 11.
+				Small changes in \(Z\) and \(E\) can therefore significantly affect PEA.
+				This has practical implications in the field of radiation protection and is the reason why materials with a high \(Z\) such as lead (\(Z= 82\)) are useful shielding materials.
+				The dependence of PEA on \(Z\) and \(E\) means that it is the major contributor to beam attenuation up to approximately 30 keV when human tissues (\(Z=7.4\)) are irradiated.
+				At beam energies above this, the Compton effect predominates.}
+			\item Compton scattering is one of the principle forms of photon interaction and is directly proportional to the (electron \& physical) density of the material.
+				It does \emph{not} depend on the atomic number: \(\lambda' - \lambda = \frac{h}{m_e c}\left(1-\cos{\theta}\right)\)
+			\note{Where \(\lambda\) is the initial wavelength, \(\lambda'\) is the wavelength after scattering, \(h\) is the Planck constant, \(m_e\) is the electron rest mass, \(c\) is the speed of light, and \(\theta\) is the scattering angle.}
 		\end{itemize}
+		\item Lowering x-ray energy increases contrast
+		\item X-ray penetration decreases exponentially with sample thickness (\cite[\ie Beer-Lamberts law]{wiki:beer-lambert} \(I(t) = I_0 \, e^{-\alpha z}\)
 	\end{itemize}
 \end{frame}
 
-\section{(Micro-)Tomography}
 \begin{frame}
-	\begin{itemize}
-		\item History
-		\item Overview
-		\item Applications (c.f. Stefan Handschuh)
-		\item Some relevant stuff from the \uct-lecture, hinting at staining \emph{et al.}
-	\end{itemize}
+	\frametitle{Composition of biological tissues}
+	Tissue: content by mass percentage
+	\centering
+	\begin{table}%
+		\only<1>{%
+			\pgfplotstabletypeset[%
+				col sep=comma,% the seperator in our .csv file
+				display columns/0/.style={string type},%
+				% section 3.2 in pgfplotstable manual
+				every head row/.style={before row={\toprule}},%
+				every row no 0/.style={after row=\midrule},%
+				every last row/.style={after row=\bottomrule},%
+			]{./tables/tissue-composition.csv}%
+		}%
+		\only<2|handout:0>{%
+			\pgfplotstabletypeset[%
+				col sep=comma,% the seperator in our .csv file
+				display columns/0/.style={string type},%
+				every head row/.style={before row={\toprule}},%
+				every row no 0/.style={after row=\midrule},%
+				every last row/.style={after row=\bottomrule},%
+				% make certain cells ubRed, based on https://tex.stackexchange.com/a/296914/828
+				every row 1 column 2/.style={postproc cell content/.append style={/pgfplots/table/@cell content/.add={\cellcolor{ubRed!61.8}}{}}},%
+				every row 1 column 4/.style={postproc cell content/.append style={/pgfplots/table/@cell content/.add={\cellcolor{ubRed!61.8}}{}}},%
+				every row 6 column 6/.style={postproc cell content/.append style={/pgfplots/table/@cell content/.add={\cellcolor{ubRed!61.8}}{}}},%
+				every row 6 column 10/.style={postproc cell content/.append style={/pgfplots/table/@cell content/.add={\cellcolor{ubRed!61.8}}{}}}%
+			]{./tables/tissue-composition.csv}%
+		}%
+	\end{table}
+	\note{Bone, lean tissue, fat and air can be distinguished quite easily}
 \end{frame}
+
+\subsection{why \uct?}
+\renewcommand{\imagewidth}{\columnwidth}
+\begin{frame}
+	\frametitle{Why \uct?}
+	\begin{columns}
+		\begin{column}{0.49\linewidth}
+			% https://www.cancerimagingarchive.net/nbia-search/?saved-cart=nbia-76761575299081509
+			\only<1-4|handout:1-4>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
+				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
+				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
+					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					%\draw[|-|,blue,thick] (0,200) -- (512,200) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{250.0096}{\milli\meter} (512px) TEMPORARY!};
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+				\end{tikzpicture}%
+			}%
+			\only<5|handout:0>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
+				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
+				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
+				\def\mag{5}% magnification of inset
+				\def\size{100}% size of inset
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale,spy using outlines={rectangle,magnification=\mag,size=\size,connect spies}]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
+					\spy [red] on (102,342) in node at (256,201) [anchor=center];
+					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+				\end{tikzpicture}%
+			}%
+			\renewcommand{\imagewidth}{0.1554\columnwidth}%
+			\only<6|handout:5>{%
+				\centering
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
+				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
+				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
+					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+				\end{tikzpicture}%
+			}%
+			\sourcecite{Clark2013}{Subject \emph{C3L-02465}}
+		\end{column}%
+		\begin{column}{0.49\linewidth}
+			\only<1|handout:1>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
+				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
+				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
+					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
+					%\draw[|-|,blue,thick] (0,746) -- (3295,746) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.2282}{\milli\meter} (3295px) TEMPORARY!};
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+				\end{tikzpicture}%
+			}%
+			\renewcommand{\imagewidth}{0.1\columnwidth}%
+			\only<2|handout:2>{%
+				\centering
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/54}%
+				\def\x{33}% scalebar-x starting at golden ratio of image width of 54px = 33
+				\def\y{22}% scalebar-y at 90% of image height of 24px = 22
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse_488umppx}};
+					% 54.000px = 26.3682mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					%\draw[|-|,blue,thick] (0,12) -- (54,12) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.3682}{\milli\meter} (54px) TEMPORARY!};
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+					%\draw[color=red, anchor=south west] (0,24) node [fill=white, semitransparent] {Legend} node {Legend};
+				\end{tikzpicture}%
+			}%
+			\renewcommand{\imagewidth}{\columnwidth}
+			\only<3|handout:3>{%
+				\centering
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/54}%
+				\def\x{33}% scalebar-x starting at golden ratio of image width of 54px = 33
+				\def\y{22}% scalebar-y at 90% of image height of 24px = 22
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse_488umppx}};
+					% 54.000px = 26.3682mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
+					%\draw[|-|,blue,thick] (0,12) -- (54,12) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.3682}{\milli\meter} (54px) TEMPORARY!};
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+10.24,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+					%\draw[color=red, anchor=south west] (0,24) node [fill=white, semitransparent] {Legend} node {Legend};
+				\end{tikzpicture}%
+			}%
+			\only<4|handout:4>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
+				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
+				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
+					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+				\end{tikzpicture}%
+			}%
+			\only<5|handout:0>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
+				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
+				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
+				\def\mag{5}% magnification of inset
+				\def\size{100}% size of inset
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale,spy using outlines={rectangle,magnification=\mag,size=\size,connect spies}]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
+					\spy [red] on (352,1116) in node at (1648,746) [anchor=center];
+					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+				\end{tikzpicture}%
+			}%
+			\only<6|handout:5>{%
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
+				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
+				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
+					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
+					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
+				\end{tikzpicture}%
+			}%
+		\end{column}
+	\end{columns}
+\end{frame}
+\note{The human head scan was downloaded from the \href{https://www.cancerimagingarchive.net}{Cancer Imaging Archive}.
+	We loaded the DICOM slices in Fiji, resliced it to show it from the side and then used to generate an MIP.
+	According to the DICOM tags, the voxel size is \SI{0.4883x0.4883x0.625}{\milli\meter\cubed}, the image size is 512\(\times\)512 pixels.
+	The mouse head is the same as shown in the early animation.
+	The files from the early animation were resized 0.25 times; here we used the original dataset (Mouse1265\_Skull\_Gaby\_TKI\_7\_96um\_Al05\_2K) for a reslice and the generation of the MIP.
+	The voxel size of the original data is 7.96 um, the image size is 3295\(\times\)1492 pixels.
+	}
+
+	\section{A scan, from \emph{getting started} to \emph{nice image}}
+	\begin{frame}
+		\frametitle{Preparation}
+		\begin{itemize}
+			\item Study design
+			\item Sample preparation
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Projections}
+		\centering
+		% Movie frames generated with https://github.com/habi/Lecture.Microtomography/blob/master/Notebooks/FromProjectionsToReconstructions.ipynb
+		\mode<beamer>{\animategraphics[autoplay,loop,height=\imageheight,every=\everyframe]{24}{./movies/scan/projections/KP-TNIKWT02_240_projections_of_940_800_px_}{000}{313}}
+		\mode<handout>{\includegraphics[height=\imageheight]{./movies/scan/projections/KP-TNIKWT02_240_projections_of_940_800_px_000}}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Projections}
+		\begin{itemize}
+			\item A (micro-focus) x-ray source illuminates the object
+			\item The x-rays penetrate the sample and are attenuated
+			\item A scintillator converts the x-rays to visible light
+			\item A (planar) x-ray detector collects (magnified) projection images.
+			\item The projections are recorded on disk
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Reconstructions}
+		\centering
+		% Movie frames generated with https://github.com/habi/Lecture.Microtomography/blob/master/Notebooks/FromProjectionsToReconstructions.ipynb
+		\mode<beamer>{\animategraphics[autoplay,palindrome,height=\imageheight,every=\everyframe]{24}{./movies/scan/reconstructions/KP-TNIKWT02_240_reconstructions_of_556_800_px_}{000}{277}}
+		\mode<handout>{\includegraphics[height=\imageheight]{./movies/scan/reconstructions/KP-TNIKWT02_240_reconstructions_of_556_800_px_100}}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Reconstructions}
+		\begin{itemize}
+			\item Based on hundreds of angular views acquired while the object rotates, a computer synthesizes a stack of virtual cross section slices through the object.
+			\item Radon Transformation
+			\item Filtered back projection
+			\item Fan beam reconstruction
+			\item Corrections (beam hardening, etc.)
+			\item Writing to stack
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Visualization}
+		\begin{tikzpicture}[remember picture,overlay]%
+		\node at (current page.center){%
+			\mode<beamer>{\animategraphics[autoplay,loop,height=\paperheight,every=\everyframe]{24}{./movies/scan/visualization/lung}{000}{240}}%
+			\mode<handout>{\includegraphics[height=\paperheight]{./movies/scan/visualization/lung000}}%
+			};%
+		\end{tikzpicture}%
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Visualization}
+		\begin{itemize}
+			\item Based the on reconstructions, a computer synthesizes a three-dimensional view of the scanned sample
+		\end{itemize}
+	\end{frame}
 
 \section{Data wrangling by example}
+\subsection{Teeth}
 \begin{frame}
+	\frametitle{Internal morphology of human teeth}
+	\begin{tikzpicture}[remember picture,overlay]%
+		\node at (current page.center) [shift={(0,-25pt)}]{%
+		\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full/image0}{000}{474}%
+			};%
+	\end{tikzpicture}%
+	Collaboration with \href{https://www.zmk.unibe.ch/}{zmk bern – Zahnmedizinische Kliniken}
+	\begin{itemize}
+		\item Numbers instead of just pretty images
+		\item Segmentation of teeth and root canal
+		\item (Unbiased) Characterization
+		\item Reproducible and automated image analysis (\href{https://www.python.org/}{\faPython} in \href{https://jupyter.org/}{Jupyter}~\cite{Kluyver2016})
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Internal morphology of human teeth}
+	Collaboration with \href{https://www.zmk.unibe.ch/}{zmk bern – Zahnmedizinische Kliniken}
+	\begin{itemize}
+		\item Numbers instead of just pretty images
+		\item Segmentation of teeth and root canal
+		\item (Unbiased) Characterization
+		\item Reproducible and automated image analysis (\href{https://www.python.org/}{\faPython} in \href{https://jupyter.org/}{Jupyter}~\cite{Kluyver2016})
+	\end{itemize}
+\end{frame}
+
+\renewcommand{\imagewidth}{0.75\linewidth}
+\renewcommand{\imageheight}{0.618\paperheight}
+\begin{frame}
+	\frametitle{How?}
+	\begin{columns}
+		\begin{column}{0.5\linewidth}
+			\begin{itemize}
+				\item<1-> 104 extracted human permanent mandibular canines
+				\item<2-> \uct imaging
+				\item<4-> Morphology
+				\begin{itemize}
+					\item<4-> Root canal morphology, according to~\citeauthor{Briseno-Marroquin2015}~\cite{Briseno-Marroquin2015}
+					\item<5-> Foramen geometry and size, according to~\citeauthor{Wolf2017}~\cite{Wolf2017}
+				\end{itemize}
+				\item<6-> \emph{Reproducible} analysis~\cite{Haberthur2020a}\onslide<7>{, \eg you can \href{https://mybinder.org/v2/gh/habi/zmk-tooth-cohort/master?filepath=ToothAnalysis.ipynb}{click a button to double-check} or \href{https://nbviewer.jupyter.org/github/habi/zmk-tooth-cohort/blob/master/ToothAnalysis.ipynb}{recalculate the results yourself!}}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.5\linewidth}
+			\only<1>{%
+				\centering
+				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+				\pgfmathsetlength{\imagescale}{\imagewidth/2716}%
+				\def\x{1678}% scalebar-x starting at golden ratio of image width of 2716px = 1678
+				\def\y{2444}% scalebar-y at 90% of image height of 2716px = 2444
+				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
+					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/bucketofteeth}};
+					% 2132.087px = 140.0mm -> 100px = 6566.337um -> 7.615px = 500um, 1.523px = 100um
+					%\draw[|-|,blue,thick] (299,1340) -- (2430,1406) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{140.0}{\milli\meter} (2132px) TEMPORARY!};
+					\draw[|-|,white,thick,shadowed] (\x,\y) -- (\x+761.5,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
+				\end{tikzpicture}%
+				}%
+			\only<2>{%
+				\lstinputlisting[linerange={2-4,15-15,17-19,28-30,36-37,40-40,44-44,53-54}]{./logfiles/Tooth045.log}%
+				}%
+			\only<3>{%
+				\emph{Sample changer} on the SkyScan 1272\newline
+				In total:
+				\begin{itemize}
+					\item 13 days of \emph{continuous} \uct scanning
+					\item \SI{819}{\giga\byte} of raw data\newline\num{230648} TIFF projections
+					\item \SI{326}{\giga\byte} data as input for analysis\newline\num{282062} PNG reconstructions
+				\end{itemize}
+					}%
+			\renewcommand{\imagewidth}{\linewidth}%
+			\only<4>{%
+				\centering%
+				\includegraphics[width=\imagewidth]{./images/briseno}%
+				\sourcecite{Briseno-Marroquin2015}{Fig.~2}%
+				}%
+			\only<5>{%
+				\centering%
+				\includegraphics[width=\imagewidth]{./images/foramen}%
+				\sourcecite{Wolf2017}{Fig.~1}%
+				}%
+			\only<6>{%
+				\centering%
+				\animategraphics[loop,autoplay,width=\imagewidth]{24}{./movies/coder/coder-}{0}{133}%
+				\source{gph.is/2nqkple}{}%
+				}%
+			\only<7>{%
+				\centering
+				\href{https://mybinder.org/v2/gh/habi/zmk-tooth-cohort/master?filepath=ToothAnalysis.ipynb}{\includegraphics[height=\imageheight]{./images/binder}}%
+				}%
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Tooth morphology}
+	\begin{tikzpicture}[remember picture,overlay]%
+		\node at (current page.center) [shift={(0,-25pt)}]{%
+			\only<1>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full/image0}{000}{474}}%
+			\only<2>{\includegraphics[height=\imageheight]{./images/briseno}\sourcecite{Briseno-Marroquin2015}{Fig.~2}}%
+			\only<3>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full-slices/image0}{000}{466}}%
+			};%
+	\end{tikzpicture}%
+\end{frame}
+
+\begin{frame}
+	\frametitle{Detection of enamel-dentin border}
+	\centering
+	\only<1>{%
+		\includegraphics[height=\imageheight]{./images/tooth045/Tooth045_ExtractedSlices}%
+		}%
+	\only<2>{%
+		\includegraphics[width=\linewidth]{./images/tooth045/Tooth045_Briseno}%
+		}%
+\end{frame}
+
+\begin{frame}
+	\frametitle{Extraction of root canal space}
+	\begin{tikzpicture}[remember picture,overlay]%
+	\node at (current page.center) [shift={(0,-25pt)}]{%
+		\only<1>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices/image0}{000}{473}}%
+		\only<2>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices-pulpa/image0}{000}{457}}%
+		\only<3>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/pulpa/image0}{000}{413}}%
+		};%
+	\end{tikzpicture}%
+\end{frame}
+
+\begin{frame}
+	\frametitle{Analysis of the physiological foramen geometry}
+	\centering
+	\only<1>{%
+		\includegraphics[height=\imageheight]{./images/foramen}%
+		\sourcecite{Wolf2017}{Fig.~1}%
+		}%
+	\only<2>{%
+		\animategraphics[palindrome,autoplay,height=\imageheight]{24}{./movies/tooth045/edt-axial/Tooth045_EDT_Axial_}{100}{199}%
+		}%
+	\only<3>{%
+		\animategraphics[palindrome,autoplay,height=\imageheight]{24}{./movies/tooth045/edt-coronal/Tooth045_EDT_Coronal_}{123}{213}%
+		}%
+\end{frame}
+
+\begin{frame}
+	\frametitle{Data wrangling by example}
 	\begin{itemize}
 		\item Cichlids
+		\item Preprint: \href{http://doi.org/krfn}{doi.org/krfn}\footcite{Haberthuer2023}
 		\item Image processing
 		\item Python/Jupyter
 	\end{itemize}
 \end{frame}
 
+
+\begin{frame}[label=current]
+	\frametitle{Data wrangling by example: Zebrafish}
+	\begin{columns}
+		\begin{column}{0.49\linewidth}
+			\begin{itemize}
+				\item \cite{Mercader2023}
+				\item Part of a bigger study
+				\item Confirmation of results by \uct
+			\end{{itemize}
+		\end{column}
+		\begin{column}{0.49\linewidth}
+			\includegraphics[page=1,height=\imageheight]{./images/cox7a/Cell_Fig3}
+		\end{column}
+	\end{columns}
+\end{frame}
+\note{The oxidative phosphorylation (OXPHOS) system is dynamic and the respiratory complexes (RCs) coexist with super-assembled quaternary structures called supercomplexes (SCs). How assembly occurs and the physiological role of supercomplex assembly is still under intensive investigation. The Cox7a family member Cox7a2l, also known as Scaf1, promotes CIII-CIV super assembly and energetic efficiency in zebrafish, mice, and humans. Here we studied the role of a second member of the Cox7a family, Cox7a1 in SC assembly and striated muscle physiology. We found that this protein drives CIV homodimer formation, which increases CIV activity. The substantial reduction in CIV2 formation led to a profound metabolic rearrangement with a consequent non-pathological loss of skeletal muscle performance and muscle mass not observed in cox7a2l. Ablation of Cox7a1 also rewired heart metabolism. While overall cardiac function was not affected, the absence of Cox7a1, but not Cox7a2l increased cardiac regenerative capacity. In sum, we describe a high specificity of Cox7a isoform in controlling OXPHOS assembly and muscle metabolism. While overall OXPHOS activity is modified, the loss of CIII-CIV heterodimer formation or CIV homodimer formation have very distinct metabolic and physiological consequences, highlighting the complexity of OXPHOS function and the importance of cox7a1 in striated muscle maturation.}
+
 \begin{frame}
-	\frametitle{Data wrangling by example}
+	\frametitle{Image analysis}
+	\includegraphics<1>[height=\imageheight]{./images/cox7a/Overview}%
+	\includegraphics<2>[height=\imageheight]{./images/cox7a/ko02_Cut}%
+	\includegraphics<3>[height=\imageheight]{./images/cox7a/Histograms_Experiment}%
+	\includegraphics<4>[height=\imageheight]{./images/cox7a/Volume_Boxplot}%
+\end{frame}
+
+\subsection{Cichlids}
+\begin{frame}[label=current]
+	\frametitle{Data wrangling by example: Cichlids}
+	\cite{Haberthuer2023}
+\end{frame}
+
+\begin{frame}[label=current]
+	\frametitle{Data wrangling by example: Cichlids}
 	\centering
 	\includegraphics<1>[height=\imageheight]{./images/cichlids/Otolither_104016_head_01_Overview}%
 	\includegraphics<2>[height=\imageheight]{./images/cichlids/Otolither_104016_head_02_GrayValues}%
@@ -237,14 +732,16 @@
 	\includegraphics<7>[height=\imageheight]{./images/cichlids/Otolither_104016_head_07_ExtractedRegions}%
 	\includegraphics<8>[height=\imageheight]{./images/cichlids/Otolither_104016_head_08_ExtractedRegionsMIPs}%
 	\includegraphics<9>[height=\imageheight]{./images/cichlids/Otolither_104016_head_09_ExtractedOtolithMasked}%
-	\only<10>{\href{file:///./images/cichlids/Otolither\_104016\_head\_3D.html}{Exported 3D view}}%
+	\only<10>{\href{https://htmlpreview.github.io/?https://github.com/habi/EAWAG-manuscript/blob/main/content/data/104016_Enterochromis_I_cinctus_St_E.head.rec.Otolith.Region.3D.html}{Exported 3D view}}%
 \end{frame}
+
+
 
 \section{Take home message}
 \begin{frame}
 	\begin{itemize}
-		\item Ask me anything
-		\item Let's do this in the \emph{Hands-on} session
+		\item Ask me anything!
+		\item Let's do this in the \emph{Hands-on} session!
 	\end{itemize}
 \end{frame}
 
