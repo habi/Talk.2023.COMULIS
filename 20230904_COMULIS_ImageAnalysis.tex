@@ -12,7 +12,7 @@
 
 %\includeonlyframes{current}
 %then....
-%\begin{frame}[label=current]
+%\begin{frame}
 %\end{frame}
 
 % Some often used abbreviations/commands
@@ -26,39 +26,45 @@
 
 \usepackage[backend=biber,
 	style=numeric,
-	backref=true,
 	url=false,
+	isbn=true,
 	maxnames=1,
 	sorting=none]{biblatex}
 \addbibresource{../../Documents/library.bib}% FastSSD, Windows or Mac works (on Linux/FastSSD we generated a 'Document' folder at the correct level and `ln -s ~/P/Documents/library.bib .` to it)
 \usepackage{standalone}
 \usepackage{tikz}
 	\usetikzlibrary{spy}
-	\usetikzlibrary{backgrounds}
 	\tikzset{shadowed/.style={preaction={transform canvas={shift={(1pt,-1pt)}},draw=ubRed}}}
 \usepackage{shadowtext}% for the shadowed scalebar
 	\shadowoffset{1pt}
 	\shadowcolor{ubRed}
 \usepackage{pgfplots}
 	\pgfplotsset{compat=newest}
-\usepackage{pgfplotstable}
-\usepackage{booktabs}
-\usepackage{colortbl}
 \usepackage[detect-all=true,
 	range-phrase=--,
 	range-units=single,
+	binary-units=true,
 	per-mode=symbol,
 	per-symbol=/]{siunitx}
+\usepackage{microtype}
 \usepackage[absolute,overlay]{textpos}%for the \source{} command
-\usepackage[missing=main]{gitinfo2}% GitHub Actions don't pull in the commit hash, so we force the footer some lines down.
+\usepackage[missing=main]{gitinfo2}% GitHub Actions don't pull in the commit hash, so we just show `main'
 \usepackage{xspace}
 \usepackage{ccicons}
 \usepackage[version=4]{mhchem}
 \usepackage{animate}
 \usepackage{fontawesome5}
 \usepackage{csquotes}
+\usepackage{listings}
+	\lstset{frame=single,
+		%backgroundcolor = \color{lightgray},
+		basicstyle=\tiny\ttfamily
+		}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{multirow}
 \usepackage{lipsum}%for alignment testing
-\usepackage{datetime2}
 \usepackage{mathastext}
 
 % Define complementary colors to ubRed
@@ -133,9 +139,10 @@
 	\hspace*{4ex}%
 	\vspace{0.5ex}%
 }
+
 \addtobeamertemplate{footline}{}%
 {%
-	\begin{beamercolorbox}[wd=\paperwidth,center]{green}%
+	\begin{beamercolorbox}[wd=\paperwidth,center]{white}%
 		\progressbar@progressbar%
 	\end{beamercolorbox}%
 }%
@@ -158,15 +165,6 @@
 \renewcommand{\bibopenparen}{\addcomma\addspace}
 \renewcommand{\bibcloseparen}{\addcomma\addspace}
 
-% Show current section at begin of sections, but only in presentation mode
-\mode<beamer>{%
-	\AtBeginSection[]{%
-		\begin{frame}{Contents}
-			\tableofcontents[currentsection,currentsubsection,hideothersubsections]
-		\end{frame}
-	}
-}
-
 % Redefine \footcite based on https://tex.stackexchange.com/a/453528/828
 \DeclareCiteCommand{\footcite}[\mkbibfootnote]{%
 	\usebibmacro{prenote}}{%
@@ -179,14 +177,27 @@
 		\usebibmacro{postnote}%
 	}%
 
-% Needed for non-flashing movies: https://tex.stackexchange.com/a/649450/828
-\def\zeropad#1#2{%
-  \ifnum1#2<1#1
-    \zeropad{#1}{0#2}%
-  \else%
-    #2%
-  \fi%
+% References as footnotes at the bottom of the slides
+% https://tex.stackexchange.com/a/368760/828
+\makeatletter
+\renewcommand\@makefnmark{\xspace\hbox{\usebeamercolor[fg]{footnote mark}\usebeamerfont*{footnote mark}[\@thefnmark]}}
+\renewcommand\@makefntext[1]{\tiny{\usebeamercolor[fg]{footnote mark}\usebeamerfont*{footnote mark}[\@thefnmark]}\enspace\usebeamerfont*{footnote} #1}
+\makeatother
+
+% Show current section at begin of sections, but only in presentation mode
+\mode<beamer>{%
+	\AtBeginSection[]{%
+		\begin{frame}{Contents}
+			\tableofcontents[currentsection,currentsubsection,hideothersubsections]
+		\end{frame}
+	}
 }
+
+% Slide transiton
+%\addtobeamertemplate{background canvas}{\transfade[duration=0.5]}{}
+
+% open in fullscreen
+%\hypersetup{pdfpagemode=FullScreen}
 
 % Move the text down a bit
 % THIS IS A BIG HACK, IT SHOULD BE FIXED IN THE TEMPLATE
@@ -201,6 +212,33 @@
 		\maketitle
 	\end{frame}%
 }
+
+%% Alignment frames to test the ugly text-block-movement hack above
+%\begin{frame}[label=current]{Alignment frame}
+%	\begin{tikzpicture}%
+%		\def\cut{2}%
+%		\draw [|-|,ultra thick] (0,\cut) -- (0,\textheight-\cut);%
+%		\draw [<->,ultra thick] (0.5\textwidth,\cut) -- (0.5\textwidth,\textheight-\cut);%
+%		\draw [|-|,ultra thick] (\textwidth,\cut) -- (\textwidth,\textheight-\cut);%
+%	\end{tikzpicture}%
+%\end{frame}
+%
+%\begin{frame}[allowframebreaks,label=current]{Alignment frame II}
+%	\lipsum[1-3]
+%\end{frame}
+
+\begin{frame}
+	\frametitle{Grüessech!}
+	\begin{itemize}
+		\item David Haberthür
+		\begin{itemize}
+			\item Physicist by trade
+			\item \href{https://boris.unibe.ch/2619/}{PhD in high resolution imaging of the lung}, Institute of Anatomy, University of Bern, Switzerland
+			\item Post-Doc I: Tomographic imaging at \href{https://www.psi.ch/sls/tomcat/}{TOMCAT}, \href{https://www.psi.ch/sls/}{Swiss Light Source}, \href{https://www.psi.ch/}{Paul Scherrer Institute}, Switzerland and working on the detector of the \href{http://globaldiagnostix.org}{GlobalDiagnostiX} project
+			\item Post-Doc II \& currently: Tomographic imaging in the \href{https://www.ana.unibe.ch/forschung/mikroct/research/}{\uct group}, Institute of Anatomy, University of Bern, Switzerland
+		\end{itemize}
+	\end{itemize}
+\end{frame}
 
 \begin{frame}
 	\frametitle{\uct-group}
@@ -217,18 +255,18 @@
 				\item Collaborations with museums~\cite{Bochud2021} and scientist at UniBe~\cite{Halm2021} to scan a wide range of specimens
 				\item Automate \emph{all} the things!~\cite{Haberthuer2021, Haberthuer2023}
 			\end{itemize}
-		\end{column}
-		\begin{column}{0.37\linewidth}
-			\centering
-			\includegraphics<1>[width=\imagewidth]{./images/1172}%
-			\only<1>{\source{brukersupport.com}{}}
-			\includegraphics<2>[width=\imagewidth]{./images/1272}%
-			\only<2>{\source{bruker.com/skyscan1272}{}}
-			\includegraphics<3>[width=\imagewidth]{./images/2214}%
-			\only<3>{\source{bruker.com/skyscan2214}{}}
-		\end{column}
-	\end{columns}
-\end{frame}
+			\end{column}%
+			\begin{column}{0.37\linewidth}%
+				\centering%
+				\includegraphics<1|handout:0>[width=\imagewidth]{./images/1172}%
+				\only<1|handout:0>{\source{brukersupport.com}{}}%
+				\includegraphics<2>[width=\imagewidth]{./images/1272}%
+				\only<2>{\source{bruker.com/skyscan1272}{}}%
+				\includegraphics<3|handout:0>[width=\imagewidth]{./images/2214}%
+				\only<3|handout:0>{\source{bruker.com/skyscan2214}{}}%
+			\end{column}%
+		\end{columns}%
+	\end{frame}
 
 \begin{frame}{Contents}
 	\tableofcontents
@@ -241,39 +279,6 @@
 	\includegraphics[height=\imageheight]{./images/MIC-AM_techniques}%
 	\sourcelink{https://anatomie.unibe.ch/tschanz}{Stefan Tschanz}{with permission}%
 \end{frame}
-
-\subsection{History}
-\renewcommand{\imagewidth}{\columnwidth}
-\begin{frame}
-	\frametitle{History}
-	\begin{columns}
-		\begin{column}{0.49\linewidth}
-			\begin{itemize}
-				\item Long history
-				\begin{itemize}
-					\item \citeyear{Cormack1963}:~\citeauthor{Cormack1963} used a collimated \ce{^{60}Co} source and a Geiger counter as a detector~\cite{Cormack1963}%
-					\item 1976:~\citeauthor{Hounsfield1976a} worked on first clinical scanner~\cite{Hounsfield1976a}%
-					\item Nice overview by \citeauthor{Hsieh2003}~\cite{Hsieh2003}%
-				\end{itemize}%
-				\item<2-|handout:2-> CT scanner generations: First\uncover<3-|handout:3->{, second}\uncover<4|handout:4->{ and third}%
-			\end{itemize}
-		\end{column}
-		\begin{column}{0.49\linewidth}
-			\centering
-			\includegraphics<1|handout:1>[height=\imageheight]{./images/ch8f2}%
-			\only<1|handout:1>{\sourcecite{Taubmann2018}{Figure 8.2}}%
-			\includegraphics<2|handout:2>[width=\imagewidth]{./images/History_Generation1}%
-			\only<2|handout:2>{\sourcecite{Hsieh2003}{Figure 1.12}}%
-			\includegraphics<3|handout:3>[width=\imagewidth]{./images/History_Generation2}%
-			\only<3|handout:3>{\sourcecite{Hsieh2003}{Figure 1.13}}%
-			\includegraphics<4|handout:4>[width=\imagewidth]{./images/History_Generation3}%
-			\only<4|handout:4>{\sourcecite{Hsieh2003}{Figure 1.14}}%
-		\end{column}
-	\end{columns}
-\end{frame}
-
-\end{document}
-
 
 \subsection{Interaction of x-rays with matter}
 \begin{frame}
@@ -331,151 +336,24 @@
 	\note{Bone, lean tissue, fat and air can be distinguished quite easily}
 \end{frame}
 
-\subsection{why \uct?}
-\renewcommand{\imagewidth}{\columnwidth}
-\begin{frame}
-	\frametitle{Why \uct?}
-	\begin{columns}
-		\begin{column}{0.49\linewidth}
-			% https://www.cancerimagingarchive.net/nbia-search/?saved-cart=nbia-76761575299081509
-			\only<1-4|handout:1-4>{%
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
-				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
-				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
-					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
-					%\draw[|-|,blue,thick] (0,200) -- (512,200) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{250.0096}{\milli\meter} (512px) TEMPORARY!};
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
-				\end{tikzpicture}%
-			}%
-			\only<5|handout:0>{%
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
-				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
-				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
-				\def\mag{5}% magnification of inset
-				\def\size{100}% size of inset
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale,spy using outlines={rectangle,magnification=\mag,size=\size,connect spies}]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
-					\spy [red] on (102,342) in node at (256,201) [anchor=center];
-					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
-				\end{tikzpicture}%
-			}%
-			\renewcommand{\imagewidth}{0.1554\columnwidth}%
-			\only<6|handout:5>{%
-				\centering
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/512}%
-				\def\x{316}% scalebar-x starting at golden ratio of image width of 512px = 316
-				\def\y{361}% scalebar-y at 90% of image height of 401px = 361
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_human}};
-					% 512.000px = 250.0096mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
-				\end{tikzpicture}%
-			}%
-			\sourcecite{Clark2013}{Subject \emph{C3L-02465}}
-		\end{column}%
-		\begin{column}{0.49\linewidth}
-			\only<1|handout:1>{%
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
-				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
-				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
-					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
-					%\draw[|-|,blue,thick] (0,746) -- (3295,746) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.2282}{\milli\meter} (3295px) TEMPORARY!};
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
-				\end{tikzpicture}%
-			}%
-			\renewcommand{\imagewidth}{0.1\columnwidth}%
-			\only<2|handout:2>{%
-				\centering
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/54}%
-				\def\x{33}% scalebar-x starting at golden ratio of image width of 54px = 33
-				\def\y{22}% scalebar-y at 90% of image height of 24px = 22
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse_488umppx}};
-					% 54.000px = 26.3682mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
-					%\draw[|-|,blue,thick] (0,12) -- (54,12) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.3682}{\milli\meter} (54px) TEMPORARY!};
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+102.4,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
-					%\draw[color=red, anchor=south west] (0,24) node [fill=white, semitransparent] {Legend} node {Legend};
-				\end{tikzpicture}%
-			}%
-			\renewcommand{\imagewidth}{\columnwidth}
-			\only<3|handout:3>{%
-				\centering
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/54}%
-				\def\x{33}% scalebar-x starting at golden ratio of image width of 54px = 33
-				\def\y{22}% scalebar-y at 90% of image height of 24px = 22
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse_488umppx}};
-					% 54.000px = 26.3682mm -> 100px = 48830.000um -> 1.024px = 500um, 0.205px = 100um
-					%\draw[|-|,blue,thick] (0,12) -- (54,12) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{26.3682}{\milli\meter} (54px) TEMPORARY!};
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+10.24,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
-					%\draw[color=red, anchor=south west] (0,24) node [fill=white, semitransparent] {Legend} node {Legend};
-				\end{tikzpicture}%
-			}%
-			\only<4|handout:4>{%
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
-				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
-				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
-					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
-				\end{tikzpicture}%
-			}%
-			\only<5|handout:0>{%
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
-				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
-				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
-				\def\mag{5}% magnification of inset
-				\def\size{100}% size of inset
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale,spy using outlines={rectangle,magnification=\mag,size=\size,connect spies}]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
-					\spy [red] on (352,1116) in node at (1648,746) [anchor=center];
-					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
-				\end{tikzpicture}%
-			}%
-			\only<6|handout:5>{%
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
-				\pgfmathsetlength{\imagescale}{\imagewidth/3295}%
-				\def\x{2036}% scalebar-x starting at golden ratio of image width of 3295px = 2036
-				\def\y{1343}% scalebar-y at 90% of image height of 1492px = 1343
-				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
-					\node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{./images/comparison/MAX_mouse}};
-					% 3295.000px = 26.2282mm -> 100px = 796.000um -> 62.814px = 500um, 12.563px = 100um
-					\draw[|-|,white,shadowed] (\x,\y) -- (\x+628.14,\y) node [midway,above] {\shadowtext{\SI{5}{\milli\meter}}};
-				\end{tikzpicture}%
-			}%
-		\end{column}
-	\end{columns}
-\end{frame}
-\note{The human head scan was downloaded from the \href{https://www.cancerimagingarchive.net}{Cancer Imaging Archive}.
-	We loaded the DICOM slices in Fiji, resliced it to show it from the side and then used to generate an MIP.
-	According to the DICOM tags, the voxel size is \SI{0.4883x0.4883x0.625}{\milli\meter\cubed}, the image size is 512\(\times\)512 pixels.
-	The mouse head is the same as shown in the early animation.
-	The files from the early animation were resized 0.25 times; here we used the original dataset (Mouse1265\_Skull\_Gaby\_TKI\_7\_96um\_Al05\_2K) for a reslice and the generation of the MIP.
-	The voxel size of the original data is 7.96 um, the image size is 3295\(\times\)1492 pixels.
-	}
-
-	\section{A scan, from \emph{getting started} to \emph{nice image}}
+\section{A scan, from \emph{getting started} to \emph{nice image}}
 	\begin{frame}
-		\frametitle{Preparation}
-		\begin{itemize}
-			\item Study design
-			\item Sample preparation
-		\end{itemize}
+		\frametitle{What is happening?}
+		\begin{columns}%
+			\begin{column}{0.49\linewidth}%
+				The basic components of a computer tomography device are always
+				\begin{itemize}
+					\item an X-ray source
+					\item something to image
+					\item a detector
+				\end{itemize}
+			\end{column}%
+			\begin{column}{0.49\linewidth}%
+				\centering%
+				\includegraphics[width=\imagewidth]{./images/3D_Computed_Tomography}%
+				\source{w.wiki/7g3}{\ccbysa}%
+			\end{column}%
+		\end{columns}%
 	\end{frame}
 
 	\begin{frame}
@@ -552,9 +430,10 @@
 	\end{itemize}
 \end{frame}
 
+
 \begin{frame}
 	\frametitle{Internal morphology of human teeth}
-	Collaboration with \href{https://www.zmk.unibe.ch/}{zmk bern – Zahnmedizinische Kliniken}
+	Collaboration with \href{https://www.zmk.unibe.ch/}{zmk bern – Zahnmedizinische Kliniken}\footcite{Haberthuer2021}
 	\begin{itemize}
 		\item Numbers instead of just pretty images
 		\item Segmentation of teeth and root canal
@@ -563,27 +442,22 @@
 	\end{itemize}
 \end{frame}
 
-\renewcommand{\imagewidth}{0.75\linewidth}
-\renewcommand{\imageheight}{0.618\paperheight}
 \begin{frame}
 	\frametitle{How?}
 	\begin{columns}
-		\begin{column}{0.5\linewidth}
+		\begin{column}{0.49\linewidth}
 			\begin{itemize}
 				\item<1-> 104 extracted human permanent mandibular canines
 				\item<2-> \uct imaging
-				\item<4-> Morphology
-				\begin{itemize}
-					\item<4-> Root canal morphology, according to~\citeauthor{Briseno-Marroquin2015}~\cite{Briseno-Marroquin2015}
-					\item<5-> Foramen geometry and size, according to~\citeauthor{Wolf2017}~\cite{Wolf2017}
-				\end{itemize}
-				\item<6-> \emph{Reproducible} analysis~\cite{Haberthur2020a}\onslide<7>{, \eg you can \href{https://mybinder.org/v2/gh/habi/zmk-tooth-cohort/master?filepath=ToothAnalysis.ipynb}{click a button to double-check} or \href{https://nbviewer.jupyter.org/github/habi/zmk-tooth-cohort/blob/master/ToothAnalysis.ipynb}{recalculate the results yourself!}}
+				\item<5-> Root canal configuration, according to~\citeauthor{Briseno-Marroquin2015}~\cite{Briseno-Marroquin2015}
+				\item<6-> \emph{Reproducible} analysis~\cite{Haberthuer2020a}\onslide<7>{, \eg you can \href{https://mybinder.org/v2/gh/habi/zmk-tooth-cohort/master?filepath=ToothAnalysis.ipynb}{click a button to double-check} or \href{https://nbviewer.jupyter.org/github/habi/zmk-tooth-cohort/blob/master/ToothAnalysis.ipynb}{recalculate the results yourself!}}
 			\end{itemize}
 		\end{column}
-		\begin{column}{0.5\linewidth}
-			\only<1>{%
-				\centering
-				\pgfmathsetlength{\imagewidth}{\imagewidth}%
+		\begin{column}{0.49\linewidth}
+			\only<1|handout:1>{%
+				\centering%
+				\renewcommand{\imagewidth}{0.75\linewidth}
+				%\pgfmathsetlength{\imagewidth}{\imagewidth}%
 				\pgfmathsetlength{\imagescale}{\imagewidth/2716}%
 				\def\x{1678}% scalebar-x starting at golden ratio of image width of 2716px = 1678
 				\def\y{2444}% scalebar-y at 90% of image height of 2716px = 2444
@@ -593,11 +467,17 @@
 					%\draw[|-|,blue,thick] (299,1340) -- (2430,1406) node [sloped,midway,above,fill=white,semitransparent,text opacity=1] {\SI{140.0}{\milli\meter} (2132px) TEMPORARY!};
 					\draw[|-|,white,thick,shadowed] (\x,\y) -- (\x+761.5,\y) node [midway,above] {\shadowtext{\SI{5}{\centi\meter}}};
 				\end{tikzpicture}%
+				\renewcommand{\imagewidth}{\columnwidth}
 				}%
-			\only<2>{%
+			\only<2|handout:2>{%
+				\centering%
+				\includegraphics[width=\imagewidth]{./images/1272}%
+				\source{bruker.com/skyscan1272}{}%
+				}%
+			\only<3|handout:3>{%
 				\lstinputlisting[linerange={2-4,15-15,17-19,28-30,36-37,40-40,44-44,53-54}]{./logfiles/Tooth045.log}%
 				}%
-			\only<3>{%
+			\only<4|handout:4>{%
 				\emph{Sample changer} on the SkyScan 1272\newline
 				In total:
 				\begin{itemize}
@@ -607,23 +487,24 @@
 				\end{itemize}
 					}%
 			\renewcommand{\imagewidth}{\linewidth}%
-			\only<4>{%
+			\only<5|handout:5>{%
 				\centering%
 				\includegraphics[width=\imagewidth]{./images/briseno}%
 				\sourcecite{Briseno-Marroquin2015}{Fig.~2}%
 				}%
-			\only<5>{%
+			\only<6|handout:6>{%
 				\centering%
-				\includegraphics[width=\imagewidth]{./images/foramen}%
-				\sourcecite{Wolf2017}{Fig.~1}%
+				\mode<beamer>{%
+					\animategraphics[loop,autoplay,width=\imagewidth,every=\everyframe]{24}{./movies/coder/coder-}{0}{133}%
+					\source{gph.is/2nqkple}{}%
+					}%
+				\mode<handout>{%
+					\includegraphics[width=\imagewidth]{./movies/coder/coder-118}%
+					\source{gph.is/2nqkple}{}%
+					}%
 				}%
-			\only<6>{%
+			\only<7|handout:7>{%
 				\centering%
-				\animategraphics[loop,autoplay,width=\imagewidth]{24}{./movies/coder/coder-}{0}{133}%
-				\source{gph.is/2nqkple}{}%
-				}%
-			\only<7>{%
-				\centering
 				\href{https://mybinder.org/v2/gh/habi/zmk-tooth-cohort/master?filepath=ToothAnalysis.ipynb}{\includegraphics[height=\imageheight]{./images/binder}}%
 				}%
 		\end{column}
@@ -634,93 +515,77 @@
 	\frametitle{Tooth morphology}
 	\begin{tikzpicture}[remember picture,overlay]%
 		\node at (current page.center) [shift={(0,-25pt)}]{%
-			\only<1>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full/image0}{000}{474}}%
-			\only<2>{\includegraphics[height=\imageheight]{./images/briseno}\sourcecite{Briseno-Marroquin2015}{Fig.~2}}%
-			\only<3>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full-slices/image0}{000}{466}}%
+			\only<1|handout:1>{%
+				\mode<beamer>{%
+					\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full/image0}{000}{474}%
+					}%
+				\mode<handout>{%
+					\includegraphics[width=\paperwidth]{./movies/tooth045/full/image0000}%
+					}%
+				}%
+			\only<2|handout:2>{\includegraphics[height=\imageheight]{./images/briseno}\sourcecite{Briseno-Marroquin2015}{Fig.~2}}%
+			\only<3|handout:3>{%
+				\mode<beamer>{%
+					\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full-slices/image0}{000}{466}%
+					}%
+				\mode<handout>{%
+					\includegraphics[width=\paperwidth]{./movies/tooth045/full-slices/image0000}%
+					}%
+				}%
 			};%
 	\end{tikzpicture}%
-\end{frame}
-
-\begin{frame}
-	\frametitle{Detection of enamel-dentin border}
-	\centering
-	\only<1>{%
-		\includegraphics[height=\imageheight]{./images/tooth045/Tooth045_ExtractedSlices}%
-		}%
-	\only<2>{%
-		\includegraphics[width=\linewidth]{./images/tooth045/Tooth045_Briseno}%
-		}%
 \end{frame}
 
 \begin{frame}
 	\frametitle{Extraction of root canal space}
 	\begin{tikzpicture}[remember picture,overlay]%
 	\node at (current page.center) [shift={(0,-25pt)}]{%
-		\only<1>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices/image0}{000}{473}}%
-		\only<2>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices-pulpa/image0}{000}{457}}%
-		\only<3>{\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/pulpa/image0}{000}{413}}%
+		\only<1|handout:0>{%
+			\mode<beamer>{%
+				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices/image0}{000}{473}%
+				}%
+			\mode<handout>{%
+				\includegraphics[width=\paperwidth]{./movies/tooth045/transparent-slices/image0000}%
+				}%
+			}%
+		\only<2|handout:1>{%
+			\mode<beamer>{%
+				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices-rcs/image0}{000}{457}%
+				}%
+			\mode<handout>{%
+				\includegraphics[width=\paperwidth]{./movies/tooth045/transparent-slices-rcs/image0000}%
+				}%
+			}%
+		\only<3|handout:0>{%
+			\mode<beamer>{%
+				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/rcs/image0}{000}{413}%
+				}%
+			\mode<handout>{%
+				\includegraphics[width=\paperwidth]{./movies/tooth045/rcs/image0000}%
+				}%
+			}%
 		};%
 	\end{tikzpicture}%
 \end{frame}
 
+\subsection{Fish I}
 \begin{frame}
-	\frametitle{Analysis of the physiological foramen geometry}
-	\centering
-	\only<1>{%
-		\includegraphics[height=\imageheight]{./images/foramen}%
-		\sourcecite{Wolf2017}{Fig.~1}%
-		}%
-	\only<2>{%
-		\animategraphics[palindrome,autoplay,height=\imageheight]{24}{./movies/tooth045/edt-axial/Tooth045_EDT_Axial_}{100}{199}%
-		}%
-	\only<3>{%
-		\animategraphics[palindrome,autoplay,height=\imageheight]{24}{./movies/tooth045/edt-coronal/Tooth045_EDT_Coronal_}{123}{213}%
-		}%
-\end{frame}
-
-\begin{frame}
-	\frametitle{Data wrangling by example}
-	\begin{itemize}
-		\item Cichlids
-		\item Preprint: \href{http://doi.org/krfn}{doi.org/krfn}\footcite{Haberthuer2023}
-		\item Image processing
-		\item Python/Jupyter
-	\end{itemize}
-\end{frame}
-
-
-\begin{frame}[label=current]
-	\frametitle{Data wrangling by example: Zebrafish}
+	\frametitle{Data wrangling by example: Cichlids}
 	\begin{columns}
 		\begin{column}{0.49\linewidth}
 			\begin{itemize}
-				\item \cite{Mercader2023}
-				\item Part of a bigger study
-				\item Confirmation of results by \uct
-			\end{{itemize}
+				\item 372 tomographic scans of 133 different Cichlids, from \SIrange{6}{18}{\centi\meter}\footcite{Haberthuer2023}
+				\item \SI{9.8}{\tera\byte} of projection images, \SI{1.5}{\tera\byte} of reconstructions
+				\item Reproducible and automated dataset wrangling, checking and image analysis (\href{https://www.python.org/}{\faPython} in \href{https://jupyter.org/}{Jupyter}~\cite{Kluyver2016})
+			\end{itemize}
 		\end{column}
 		\begin{column}{0.49\linewidth}
-			\includegraphics[page=1,height=\imageheight]{./images/cox7a/Cell_Fig3}
+			\includegraphics[width=\imagewidth]{./images/cichlids/104016}%
 		\end{column}
-	\end{columns}
+		\end{columns}
 \end{frame}
-\note{The oxidative phosphorylation (OXPHOS) system is dynamic and the respiratory complexes (RCs) coexist with super-assembled quaternary structures called supercomplexes (SCs). How assembly occurs and the physiological role of supercomplex assembly is still under intensive investigation. The Cox7a family member Cox7a2l, also known as Scaf1, promotes CIII-CIV super assembly and energetic efficiency in zebrafish, mice, and humans. Here we studied the role of a second member of the Cox7a family, Cox7a1 in SC assembly and striated muscle physiology. We found that this protein drives CIV homodimer formation, which increases CIV activity. The substantial reduction in CIV2 formation led to a profound metabolic rearrangement with a consequent non-pathological loss of skeletal muscle performance and muscle mass not observed in cox7a2l. Ablation of Cox7a1 also rewired heart metabolism. While overall cardiac function was not affected, the absence of Cox7a1, but not Cox7a2l increased cardiac regenerative capacity. In sum, we describe a high specificity of Cox7a isoform in controlling OXPHOS assembly and muscle metabolism. While overall OXPHOS activity is modified, the loss of CIII-CIV heterodimer formation or CIV homodimer formation have very distinct metabolic and physiological consequences, highlighting the complexity of OXPHOS function and the importance of cox7a1 in striated muscle maturation.}
 
 \begin{frame}
-	\frametitle{Image analysis}
-	\includegraphics<1>[height=\imageheight]{./images/cox7a/Overview}%
-	\includegraphics<2>[height=\imageheight]{./images/cox7a/ko02_Cut}%
-	\includegraphics<3>[height=\imageheight]{./images/cox7a/Histograms_Experiment}%
-	\includegraphics<4>[height=\imageheight]{./images/cox7a/Volume_Boxplot}%
-\end{frame}
-
-\subsection{Cichlids}
-\begin{frame}[label=current]
-	\frametitle{Data wrangling by example: Cichlids}
-	\cite{Haberthuer2023}
-\end{frame}
-
-\begin{frame}[label=current]
 	\frametitle{Data wrangling by example: Cichlids}
 	\centering
 	\includegraphics<1>[height=\imageheight]{./images/cichlids/Otolither_104016_head_01_Overview}%
@@ -736,6 +601,32 @@
 \end{frame}
 
 
+\subsection{Fish II}
+\renewcommand{\imageheight}{0.618\paperheight}% set global image height
+\begin{frame}
+	\frametitle{Data wrangling by example: Zebrafish}
+	\begin{columns}
+		\begin{column}{0.49\linewidth}
+			\begin{itemize}
+				\item Collaboration, part of a \emph{much} bigger story\footcite{Mercader2023}
+				\item Confirmation of results by \uct
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.49\linewidth}
+			\includegraphics[height=\imageheight]{./images/cox7a/Cell_Fig3}%
+		\end{column}
+		\end{columns}
+\end{frame}
+\note{The oxidative phosphorylation (OXPHOS) system is dynamic and the respiratory complexes (RCs) coexist with super-assembled quaternary structures called supercomplexes (SCs). How assembly occurs and the physiological role of supercomplex assembly is still under intensive investigation. The Cox7a family member Cox7a2l, also known as Scaf1, promotes CIII-CIV super assembly and energetic efficiency in zebrafish, mice, and humans. Here we studied the role of a second member of the Cox7a family, Cox7a1 in SC assembly and striated muscle physiology. We found that this protein drives CIV homodimer formation, which increases CIV activity. The substantial reduction in CIV2 formation led to a profound metabolic rearrangement with a consequent non-pathological loss of skeletal muscle performance and muscle mass not observed in cox7a2l. Ablation of Cox7a1 also rewired heart metabolism. While overall cardiac function was not affected, the absence of Cox7a1, but not Cox7a2l increased cardiac regenerative capacity. In sum, we describe a high specificity of Cox7a isoform in controlling OXPHOS assembly and muscle metabolism. While overall OXPHOS activity is modified, the loss of CIII-CIV heterodimer formation or CIV homodimer formation have very distinct metabolic and physiological consequences, highlighting the complexity of OXPHOS function and the importance of cox7a1 in striated muscle maturation.}
+
+\begin{frame}
+	\frametitle{Image analysis}
+	\centering
+	\includegraphics<1>[height=\imageheight]{./images/cox7a/Overview}%
+	\includegraphics<2>[height=\imageheight]{./images/cox7a/ko02_Cut}%
+	\includegraphics<3>[height=\imageheight]{./images/cox7a/Histograms_Experiment}%
+	\includegraphics<4>[height=\imageheight]{./images/cox7a/Volume_Boxplot}%
+\end{frame}
 
 \section{Take home message}
 \begin{frame}
