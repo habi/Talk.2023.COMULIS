@@ -185,13 +185,13 @@
 \makeatother
 
 % Show current section at begin of sections, but only in presentation mode
-\mode<beamer>{%
-	\AtBeginSection[]{%
-		\begin{frame}{Contents}
-			\tableofcontents[currentsection,currentsubsection,hideothersubsections]
-		\end{frame}
-	}
-}
+%\mode<beamer>{%
+	%\AtBeginSection[]{%
+	%	\begin{frame}{Contents}
+	%		\tableofcontents[currentsection,currentsubsection,hideothersubsections]
+	%	\end{frame}
+	%}
+%}
 
 % Slide transiton
 %\addtobeamertemplate{background canvas}{\transfade[duration=0.5]}{}
@@ -405,12 +405,12 @@
 		\end{tikzpicture}%
 	\end{frame}
 
-	\begin{frame}
-		\frametitle{Visualization}
+\begin{frame}
+	\frametitle{Visualization}
 		\begin{itemize}
 			\item Based the on reconstructions, a computer synthesizes a three-dimensional view of the scanned sample
 		\end{itemize}
-	\end{frame}
+\end{frame}
 
 \section{Data wrangling by example}
 \subsection{Teeth}
