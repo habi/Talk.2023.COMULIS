@@ -16,7 +16,7 @@
 %\end{frame}
 
 % Some often used abbreviations/commands
-\newcommand{\everyframe}{100}% use only every nth frame for the animations
+\newcommand{\everyframe}{1}% use only every nth frame for the animations
 \newcommand{\imagewidth}{\linewidth}% set global image width
 \newcommand{\imageheight}{0.618\paperheight}% set global image height
 \newlength\imagescale% needed for scalebars
@@ -170,7 +170,7 @@
 	\usebibmacro{prenote}}{%
 		\printnames[family-given]{labelname}%
 		\newunit%
-		\printfield{doi}%
+		:\xspace\thefield{url}% print only the field, but not the name of the field
 		\newunit%
 		\printlabeldateextra%
 	}{\addsemicolon\space}{%
@@ -185,13 +185,13 @@
 \makeatother
 
 % Show current section at begin of sections, but only in presentation mode
-\mode<beamer>{%
-	\AtBeginSection[]{%
-		\begin{frame}{Contents}
-			\tableofcontents[currentsection,currentsubsection,hideothersubsections]
-		\end{frame}
-	}
-}
+%\mode<beamer>{%
+	%\AtBeginSection[]{%
+	%	\begin{frame}{Contents}
+	%		\tableofcontents[currentsection,currentsubsection,hideothersubsections]
+	%	\end{frame}
+	%}
+%}
 
 % Slide transiton
 %\addtobeamertemplate{background canvas}{\transfade[duration=0.5]}{}
@@ -405,12 +405,12 @@
 		\end{tikzpicture}%
 	\end{frame}
 
-	\begin{frame}
-		\frametitle{Visualization}
+\begin{frame}
+	\frametitle{Visualization}
 		\begin{itemize}
 			\item Based the on reconstructions, a computer synthesizes a three-dimensional view of the scanned sample
 		\end{itemize}
-	\end{frame}
+\end{frame}
 
 \section{Data wrangling by example}
 \subsection{Teeth}
@@ -606,14 +606,17 @@
 \begin{frame}
 	\frametitle{Data wrangling by example: Zebrafish}
 	\begin{columns}
-		\begin{column}{0.49\linewidth}
+		\begin{column}{0.618\linewidth}
 			\begin{itemize}
 				\item Collaboration, part of a \emph{much} bigger story\footcite{Mercader2023}
 				\item Confirmation of results by \uct
 			\end{itemize}
 		\end{column}
-		\begin{column}{0.49\linewidth}
-			\includegraphics[height=\imageheight]{./images/cox7a/Cell_Fig3}%
+		\begin{column}{0.382\linewidth}
+			\includegraphics<1>[height=\imageheight]{./images/cox7a/Cell_Fig3}%
+			\only<2>{%
+				\lstinputlisting[linerange={2-4,15-15,17-19,28-30,36-37,40-40,44-44,53-54}]{./logfiles/ko02.log}%
+				}%
 		\end{column}
 		\end{columns}
 \end{frame}
@@ -631,8 +634,8 @@
 \section{Take home message}
 \begin{frame}
 	\begin{itemize}
-		\item Ask me anything!
-		\item Let's do this in the \emph{Hands-on} session!
+		\item Ask us anything!
+		\item Let's do most of this in the \emph{Hands-on} sessions!
 	\end{itemize}
 \end{frame}
 
