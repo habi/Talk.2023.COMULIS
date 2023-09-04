@@ -8,7 +8,7 @@
 \title{\uct and image analysis}
 \author{David Haberthür}
 \institute{Institute of Anatomy\\University of Bern\\Switzerland}
-\date{September 05, 2023 | \href{https://www.ana.unibe.ch/continuing_education/comulis_training_school/}{COMULIS Training School -- Imaging Accross Scales}}
+\date{September 05, 2023 | \href{https://www.ana.unibe.ch/continuing_education/comulis_training_school/}{COMULIS Training School -- Imaging Across Scales}}
 
 %\includeonlyframes{current}
 %then....
@@ -16,7 +16,7 @@
 %\end{frame}
 
 % Some often used abbreviations/commands
-\newcommand{\everyframe}{1}% use only every nth frame for the animations
+\newcommand{\everyframe}{333}% use only every nth frame for the animations
 \newcommand{\imagewidth}{\linewidth}% set global image width
 \newcommand{\imageheight}{0.618\paperheight}% set global image height
 \newlength\imagescale% needed for scalebars
@@ -170,7 +170,7 @@
 	\usebibmacro{prenote}}{%
 		\printnames[family-given]{labelname}%
 		\newunit%
-		:\xspace\thefield{url}% print only the field, but not the name of the field
+		\addcolon\space\thefield{url}% print only the field, but not the name of the field
 		\newunit%
 		\printlabeldateextra%
 	}{\addsemicolon\space}{%
@@ -600,7 +600,6 @@
 	\only<10>{\href{https://htmlpreview.github.io/?https://github.com/habi/EAWAG-manuscript/blob/main/content/data/104016_Enterochromis_I_cinctus_St_E.head.rec.Otolith.Region.3D.html}{Exported 3D view}}%
 \end{frame}
 
-
 \subsection{Fish II}
 \renewcommand{\imageheight}{0.618\paperheight}% set global image height
 \begin{frame}
@@ -613,6 +612,7 @@
 			\end{itemize}
 		\end{column}
 		\begin{column}{0.382\linewidth}
+			\centering
 			\includegraphics<1>[height=\imageheight]{./images/cox7a/Cell_Fig3}%
 			\only<2>{%
 				\lstinputlisting[linerange={2-4,15-15,17-19,28-30,36-37,40-40,44-44,53-54}]{./logfiles/ko02.log}%
