@@ -7,15 +7,19 @@
 \title{Welcome \& Hello!}
 \author{Ruslan Hlushchuk | Benoît Zuber | Yury Belyaev}
 \institute{Institute of Anatomy\\University of Bern\\Switzerland}
-\date{September 04, 2023 | \href{https://www.ana.unibe.ch/continuing_education/comulis_training_school/}{COMULIS Training School -- Imaging Accross Scales}}
+\date{September 04, 2023 |
+\href{https://www.ana.unibe.ch/continuing_education/comulis_training_school/}
+{COMULIS Training School -- Imaging Across Scales}}
 
 \usepackage{microtype}
 \usepackage{tikz}
 \usepackage{xspace}
-\usepackage[missing=main]{gitinfo2} % GitHub Actions don't pull in the commit hash, so we just show `main'
+\usepackage[missing=main]{gitinfo2} % GitHub Actions don't pull in the commit
+hash, so we just show `main'
 \usepackage{tcolorbox}
 
-% Define us a custom footer *with* progress bar, based on https://tex.stackexchange.com/a/59749/828
+% Define us a custom footer *with* progress bar, based on
+https://tex.stackexchange.com/a/59749/828
 \makeatletter
 \def\progressbar@progressbar{}% the progress bar
 \newcount\progressbar@tmpcounta% auxiliary counter
@@ -35,10 +39,14 @@
 	\par%
 	\begin{tikzpicture}%
 		\draw[ubGrey] (0,0) -- ++ (\progressbar@pbwd,0);%
-		\draw[draw=ubRed,fill=ubGrey] (\the\dimexpr\progressbar@tmpdim-\progressbar@rcircle\relax,.5\progressbar@pbht) circle (\progressbar@rcircle);%
+		\draw[draw=ubRed,fill=ubGrey]
+(\the\dimexpr\progressbar@tmpdim-\progressbar@rcircle\relax,.5\progressbar@pbht
+) circle (\progressbar@rcircle);%
 	\end{tikzpicture}%
 	\hfill bit.ly/cmls\xspace|\xspace%
-	v. \href{https://github.com/habi/Talk.2023.COMULIS/commit/\gitHash}{\gitAbbrevHash}\xspace|\xspace%
+	v.
+\href{https://github.com/habi/Talk.2023.COMULIS/commit/\gitHash}{\gitAbbrevHash
+}\xspace|\xspace%
 	p.\xspace\insertframenumber/\inserttotalframenumber%
 	\hspace*{4ex}%
 	\vspace{0.5ex}%
@@ -75,9 +83,14 @@
 		\begin{itemize}
 			\item Select the menu item \emph{Guest Login}
 			\item Register with your mobile number and the voucher code
-			\begin{tcolorbox}[width=3.3cm,colframe=ubRed,colback=ubGrey,halign=center,halign title=center,title=Voucher code]
-				%% Get the currently valid guest voucher here: https://serviceportal.unibe.ch/sp?id=kb_article_view&sysparm_article=KB0010178
-				%% Copy-paste it into the `voucher.tex` file, since "The voucher code must not be published publicly on the internet or other public places, rooms, pinboards or similar."
+		
+\begin{tcolorbox}[width=3.3cm,colframe=ubRed,colback=ubGrey,halign=center
+,halign title=center,title=Voucher code]
+				%% Get the currently valid guest voucher here:
+https://serviceportal.unibe.ch/sp?id=kb_article_view&sysparm_article=KB0010178
+				%% Copy-paste it into the `voucher.tex` file, since "The voucher code must
+not be published publicly on the internet or other public places, rooms,
+pinboards or similar."
 				\verbatiminput{voucher.txt}
 			\end{tcolorbox}
 			\item You will receive your access code by SMS
