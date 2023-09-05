@@ -14,12 +14,10 @@
 \usepackage{microtype}
 \usepackage{tikz}
 \usepackage{xspace}
-\usepackage[missing=main]{gitinfo2} % GitHub Actions don't pull in the commit
-hash, so we just show `main'
+\usepackage[missing=main]{gitinfo2} % GitHub Actions don't pull in the commit hash, so we just show `main`
 \usepackage{tcolorbox}
 
-% Define us a custom footer *with* progress bar, based on
-https://tex.stackexchange.com/a/59749/828
+% Define us a custom footer *with* progress bar, based on https://tex.stackexchange.com/a/59749/828
 \makeatletter
 \def\progressbar@progressbar{}% the progress bar
 \newcount\progressbar@tmpcounta% auxiliary counter
@@ -84,13 +82,9 @@ https://tex.stackexchange.com/a/59749/828
 			\item Select the menu item \emph{Guest Login}
 			\item Register with your mobile number and the voucher code
 		
-\begin{tcolorbox}[width=3.3cm,colframe=ubRed,colback=ubGrey,halign=center
-,halign title=center,title=Voucher code]
-				%% Get the currently valid guest voucher here:
-https://serviceportal.unibe.ch/sp?id=kb_article_view&sysparm_article=KB0010178
-				%% Copy-paste it into the `voucher.tex` file, since "The voucher code must
-not be published publicly on the internet or other public places, rooms,
-pinboards or similar."
+\begin{tcolorbox}[width=3.2cm,colframe=ubRed,colback=ubGrey,halign=center, halign title=center,title=Voucher code]
+				%% Get the currently valid guest voucher here: https://serviceportal.unibe.ch/sp?id=kb_article_view&sysparm_article=KB0010178
+				%% Copy-paste it into the `voucher.tex` file, since "The voucher code must not be published publicly on the internet or other public places, rooms, pinboards or similar."
 				\verbatiminput{voucher.txt}
 			\end{tcolorbox}
 			\item You will receive your access code by SMS
