@@ -64,12 +64,7 @@
 \usepackage{booktabs}
 \usepackage{colortbl}
 \usepackage{multirow}
-\usepackage{lipsum}%for alignment testing
 \usepackage{mathastext}
-
-% Define complementary colors to ubRed
-\definecolor{ubRedComplementary1}{HTML}{00a1e6}
-\definecolor{ubRedComplementary2}{HTML}{00e645}
 
 % change tikz font to slide font
 % https://tex.stackexchange.com/a/33329/828
@@ -184,21 +179,6 @@
 \renewcommand\@makefntext[1]{\tiny{\usebeamercolor[fg]{footnote mark}\usebeamerfont*{footnote mark}[\@thefnmark]}\enspace\usebeamerfont*{footnote} #1}
 \makeatother
 
-% Show current section at begin of sections, but only in presentation mode
-%\mode<beamer>{%
-	%\AtBeginSection[]{%
-	%	\begin{frame}{Contents}
-	%		\tableofcontents[currentsection,currentsubsection,hideothersubsections]
-	%	\end{frame}
-	%}
-%}
-
-% Slide transiton
-%\addtobeamertemplate{background canvas}{\transfade[duration=0.5]}{}
-
-% open in fullscreen
-%\hypersetup{pdfpagemode=FullScreen}
-
 % Move the text down a bit
 % THIS IS A BIG HACK, IT SHOULD BE FIXED IN THE TEMPLATE
 \addtobeamertemplate{frametitle}{}{\vspace*{0.75em}}
@@ -212,20 +192,6 @@
 		\maketitle
 	\end{frame}%
 }
-
-%% Alignment frames to test the ugly text-block-movement hack above
-%\begin{frame}[label=current]{Alignment frame}
-%	\begin{tikzpicture}%
-%		\def\cut{2}%
-%		\draw [|-|,ultra thick] (0,\cut) -- (0,\textheight-\cut);%
-%		\draw [<->,ultra thick] (0.5\textwidth,\cut) -- (0.5\textwidth,\textheight-\cut);%
-%		\draw [|-|,ultra thick] (\textwidth,\cut) -- (\textwidth,\textheight-\cut);%
-%	\end{tikzpicture}%
-%\end{frame}
-%
-%\begin{frame}[allowframebreaks,label=current]{Alignment frame II}
-%	\lipsum[1-3]
-%\end{frame}
 
 \begin{frame}
 	\frametitle{Grüessech!}
@@ -255,18 +221,18 @@
 				\item Collaborations with museums~\cite{Bochud2021} and scientist at UniBe~\cite{Halm2021} to scan a wide range of specimens
 				\item Automate \emph{all} the things!~\cite{Haberthuer2021, Haberthuer2023}
 			\end{itemize}
-			\end{column}%
-			\begin{column}{0.37\linewidth}%
-				\centering%
-				\includegraphics<1|handout:0>[width=\imagewidth]{./images/1172}%
-				\only<1|handout:0>{\source{brukersupport.com}{}}%
-				\includegraphics<2>[width=\imagewidth]{./images/1272}%
-				\only<2>{\source{bruker.com/skyscan1272}{}}%
-				\includegraphics<3|handout:0>[width=\imagewidth]{./images/2214}%
-				\only<3|handout:0>{\source{bruker.com/skyscan2214}{}}%
-			\end{column}%
-		\end{columns}%
-	\end{frame}
+		\end{column}%
+		\begin{column}{0.37\linewidth}%
+			\centering%
+			\includegraphics<1>[width=\imagewidth]{./images/1172}%
+			\only<1>{\source{brukersupport.com}{}}%
+			\includegraphics<2>[width=\imagewidth]{./images/1272}%
+			\only<2>{\source{bruker.com/skyscan1272}{}}%
+			\includegraphics<3>[width=\imagewidth]{./images/2214}%
+			\only<3>{\source{bruker.com/skyscan2214}{}}%
+		\end{column}%
+	\end{columns}%
+\end{frame}
 
 \begin{frame}{Contents}
 	\tableofcontents
@@ -318,7 +284,7 @@
 				every last row/.style={after row=\bottomrule},%
 			]{./tables/tissue-composition.csv}%
 		}%
-		\only<2|handout:0>{%
+		\only<2>{%
 			\pgfplotstabletypeset[%
 				col sep=comma,% the seperator in our .csv file
 				display columns/0/.style={string type},%
@@ -337,31 +303,30 @@
 \end{frame}
 
 \section{A scan, from \emph{getting started} to \emph{nice image}}
-	\begin{frame}
-		\frametitle{What is happening?}
-		\begin{columns}%
-			\begin{column}{0.49\linewidth}%
-				The basic components of a computer tomography device are always
-				\begin{itemize}
-					\item an X-ray source
-					\item something to image
-					\item a detector
-				\end{itemize}
-			\end{column}%
-			\begin{column}{0.49\linewidth}%
-				\centering%
-				\includegraphics[width=\imagewidth]{./images/3D_Computed_Tomography}%
-				\source{w.wiki/7g3}{\ccbysa}%
-			\end{column}%
-		\end{columns}%
-	\end{frame}
+\begin{frame}
+	\frametitle{What is happening?}
+	\begin{columns}%
+		\begin{column}{0.49\linewidth}%
+			The basic components of a computer tomography device are always
+			\begin{itemize}
+				\item an X-ray source
+				\item something to image
+				\item a detector
+			\end{itemize}
+		\end{column}%
+		\begin{column}{0.49\linewidth}%
+			\centering%
+			\includegraphics[width=\imagewidth]{./images/3D_Computed_Tomography}%
+			\source{w.wiki/7g3}{\ccbysa}%
+		\end{column}%
+	\end{columns}%
+\end{frame}
 
 \begin{frame}
 	\frametitle{Projections}
 	\centering
 	% Movie frames generated with https://github.com/habi/Lecture.Microtomography/blob/master/Notebooks/FromProjectionsToReconstructions.ipynb
-	\mode<beamer>{\animategraphics[autoplay,loop,height=\imageheight,every=\everyframe]{24}{./movies/scan/projections/KP-TNIKWT02_240_projections_of_940_800_px_}{000}{313}}
-	\mode<handout>{\includegraphics[height=\imageheight]{./movies/scan/projections/KP-TNIKWT02_240_projections_of_940_800_px_000}}
+	\animategraphics[autoplay,loop,height=\imageheight,every=\everyframe]{24}{./movies/scan/projections/KP-TNIKWT02_240_projections_of_940_800_px_}{000}{313}
 \end{frame}
 
 \begin{frame}
@@ -379,8 +344,7 @@
 	\frametitle{Reconstructions}
 	\centering
 	% Movie frames generated with https://github.com/habi/Lecture.Microtomography/blob/master/Notebooks/FromProjectionsToReconstructions.ipynb
-	\mode<beamer>{\animategraphics[autoplay,palindrome,height=\imageheight,every=\everyframe]{24}{./movies/scan/reconstructions/KP-TNIKWT02_240_reconstructions_of_556_800_px_}{000}{277}}
-	\mode<handout>{\includegraphics[height=\imageheight]{./movies/scan/reconstructions/KP-TNIKWT02_240_reconstructions_of_556_800_px_100}}
+	\animategraphics[autoplay,palindrome,height=\imageheight,every=\everyframe]{24}{./movies/scan/reconstructions/KP-TNIKWT02_240_reconstructions_of_556_800_px_}{000}{277}
 \end{frame}
 
 \begin{frame}
@@ -399,8 +363,7 @@
 	\frametitle{Visualization}
 	\begin{tikzpicture}[remember picture,overlay]%
 	\node at (current page.center){%
-		\mode<beamer>{\animategraphics[autoplay,loop,height=\paperheight,every=\everyframe]{24}{./movies/scan/visualization/lung}{000}{240}}%
-		\mode<handout>{\includegraphics[height=\paperheight]{./movies/scan/visualization/lung000}}%
+		\animategraphics[autoplay,loop,height=\paperheight,every=\everyframe]{24}{./movies/scan/visualization/lung}{000}{240}%
 		};%
 	\end{tikzpicture}%
 \end{frame}
@@ -430,7 +393,6 @@
 	\end{itemize}
 \end{frame}
 
-
 \begin{frame}
 	\frametitle{Internal morphology of human teeth}
 	Collaboration with \href{https://www.zmk.unibe.ch/}{zmk bern – Zahnmedizinische Kliniken}\footcite{Haberthuer2021}
@@ -454,7 +416,7 @@
 			\end{itemize}
 		\end{column}
 		\begin{column}{0.49\linewidth}
-			\only<1|handout:1>{%
+			\only<1>{%
 				\centering%
 				\renewcommand{\imagewidth}{0.75\linewidth}
 				%\pgfmathsetlength{\imagewidth}{\imagewidth}%
@@ -469,15 +431,15 @@
 				\end{tikzpicture}%
 				\renewcommand{\imagewidth}{\columnwidth}
 				}%
-			\only<2|handout:2>{%
+			\only<2>{%
 				\centering%
 				\includegraphics[width=\imagewidth]{./images/1272}%
 				\source{bruker.com/skyscan1272}{}%
 				}%
-			\only<3|handout:3>{%
+			\only<3>{%
 				\lstinputlisting[linerange={2-4,15-15,17-19,28-30,36-37,40-40,44-44,53-54}]{./logfiles/Tooth045.log}%
 				}%
-			\only<4|handout:4>{%
+			\only<4>{%
 				\emph{Sample changer} on the SkyScan 1272\newline
 				In total:
 				\begin{itemize}
@@ -487,23 +449,17 @@
 				\end{itemize}
 					}%
 			\renewcommand{\imagewidth}{\linewidth}%
-			\only<5|handout:5>{%
+			\only<5>{%
 				\centering%
 				\includegraphics[width=\imagewidth]{./images/briseno}%
 				\sourcecite{Briseno-Marroquin2015}{Fig.~2}%
 				}%
-			\only<6|handout:6>{%
+			\only<6>{%
 				\centering%
-				\mode<beamer>{%
-					\animategraphics[loop,autoplay,width=\imagewidth,every=\everyframe]{24}{./movies/coder/coder-}{0}{133}%
+				\animategraphics[loop,autoplay,width=\imagewidth,every=\everyframe]{24}{./movies/coder/coder-}{0}{133}%
 					\source{gph.is/2nqkple}{}%
-					}%
-				\mode<handout>{%
-					\includegraphics[width=\imagewidth]{./movies/coder/coder-118}%
-					\source{gph.is/2nqkple}{}%
-					}%
 				}%
-			\only<7|handout:7>{%
+			\only<7>{%
 				\centering%
 				\href{https://mybinder.org/v2/gh/habi/zmk-tooth-cohort/master?filepath=ToothAnalysis.ipynb}{\includegraphics[height=\imageheight]{./images/binder}}%
 				}%
@@ -515,22 +471,12 @@
 	\frametitle{Tooth morphology}
 	\begin{tikzpicture}[remember picture,overlay]%
 		\node at (current page.center) [shift={(0,-25pt)}]{%
-			\only<1|handout:1>{%
-				\mode<beamer>{%
-					\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full/image0}{000}{474}%
-					}%
-				\mode<handout>{%
-					\includegraphics[width=\paperwidth]{./movies/tooth045/full/image0000}%
-					}%
+			\only<1>{%
+				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full/image0}{000}{474}%
 				}%
-			\only<2|handout:2>{\includegraphics[height=\imageheight]{./images/briseno}\sourcecite{Briseno-Marroquin2015}{Fig.~2}}%
-			\only<3|handout:3>{%
-				\mode<beamer>{%
-					\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full-slices/image0}{000}{466}%
-					}%
-				\mode<handout>{%
-					\includegraphics[width=\paperwidth]{./movies/tooth045/full-slices/image0000}%
-					}%
+			\only<2>{\includegraphics[height=\imageheight]{./images/briseno}\sourcecite{Briseno-Marroquin2015}{Fig.~2}}%
+			\only<3>{%
+				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/full-slices/image0}{000}{466}%
 				}%
 			};%
 	\end{tikzpicture}%
@@ -540,29 +486,14 @@
 	\frametitle{Extraction of root canal space}
 	\begin{tikzpicture}[remember picture,overlay]%
 	\node at (current page.center) [shift={(0,-25pt)}]{%
-		\only<1|handout:0>{%
-			\mode<beamer>{%
-				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices/image0}{000}{473}%
-				}%
-			\mode<handout>{%
-				\includegraphics[width=\paperwidth]{./movies/tooth045/transparent-slices/image0000}%
-				}%
+		\only<1>{%
+			\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices/image0}{000}{473}%
 			}%
-		\only<2|handout:1>{%
-			\mode<beamer>{%
+		\only<2>{%
 				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices-rcs/image0}{000}{457}%
-				}%
-			\mode<handout>{%
-				\includegraphics[width=\paperwidth]{./movies/tooth045/transparent-slices-rcs/image0000}%
-				}%
 			}%
-		\only<3|handout:0>{%
-			\mode<beamer>{%
+		\only<3>{%
 				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/rcs/image0}{000}{413}%
-				}%
-			\mode<handout>{%
-				\includegraphics[width=\paperwidth]{./movies/tooth045/rcs/image0000}%
-				}%
 			}%
 		};%
 	\end{tikzpicture}%
@@ -582,7 +513,7 @@
 		\begin{column}{0.49\linewidth}
 			\includegraphics[width=\imagewidth]{./images/cichlids/104016}%
 		\end{column}
-		\end{columns}
+	\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -618,9 +549,9 @@
 				\lstinputlisting[linerange={2-4,15-15,17-19,28-30,36-37,40-40,44-44,53-54}]{./logfiles/ko02.log}%
 				}%
 		\end{column}
-		\end{columns}
-\end{frame}
+	\end{columns}
 \note{The oxidative phosphorylation (OXPHOS) system is dynamic and the respiratory complexes (RCs) coexist with super-assembled quaternary structures called supercomplexes (SCs). How assembly occurs and the physiological role of supercomplex assembly is still under intensive investigation. The Cox7a family member Cox7a2l, also known as Scaf1, promotes CIII-CIV super assembly and energetic efficiency in zebrafish, mice, and humans. Here we studied the role of a second member of the Cox7a family, Cox7a1 in SC assembly and striated muscle physiology. We found that this protein drives CIV homodimer formation, which increases CIV activity. The substantial reduction in CIV2 formation led to a profound metabolic rearrangement with a consequent non-pathological loss of skeletal muscle performance and muscle mass not observed in cox7a2l. Ablation of Cox7a1 also rewired heart metabolism. While overall cardiac function was not affected, the absence of Cox7a1, but not Cox7a2l increased cardiac regenerative capacity. In sum, we describe a high specificity of Cox7a isoform in controlling OXPHOS assembly and muscle metabolism. While overall OXPHOS activity is modified, the loss of CIII-CIV heterodimer formation or CIV homodimer formation have very distinct metabolic and physiological consequences, highlighting the complexity of OXPHOS function and the importance of cox7a1 in striated muscle maturation.}
+\end{frame}
 
 \begin{frame}
 	\frametitle{Image analysis}
