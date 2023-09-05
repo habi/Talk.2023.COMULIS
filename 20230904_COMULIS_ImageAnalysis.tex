@@ -1,7 +1,8 @@
 % Compile with:
 % latexmk -pdf -pvc -interaction=nonstopmode *ImageAnalysis.tex
 %\documentclass[aspectratio=169,draft]{beamer}
-\documentclass[aspectratio=169]{beamer}
+%\documentclass[aspectratio=169]{beamer}
+\documentclass[handout,aspectratio=169]{beamer}
 
 \usetheme{UniBern}
 
@@ -326,8 +327,8 @@
 	\frametitle{Projections}
 	\centering
 	% Movie frames generated with https://github.com/habi/Lecture.Microtomography/blob/master/Notebooks/FromProjectionsToReconstructions.ipynb
-	\animategraphics[autoplay,loop,height=\imageheight,every=\everyframe]{24}{./movies/scan/projections/KP-TNIKWT02_240_projections_of_940_800_px_}{000}{313}
-\end{frame}
+	\mode<beamer>{\animategraphics[autoplay,loop,height=\imheight,every=\everyframe]{24}{./movies/scan/projections/KP-TNIKWT02_240_projections_of_940_800_px_}{000}{313}}
+	\mode<handout>{\includegraphics[height=\imheight]{./movies/scan/projections/KP-TNIKWT02_240_projections_of_940_800_px_000}}\end{frame}
 
 \begin{frame}
 	\frametitle{Projections}
@@ -344,7 +345,9 @@
 	\frametitle{Reconstructions}
 	\centering
 	% Movie frames generated with https://github.com/habi/Lecture.Microtomography/blob/master/Notebooks/FromProjectionsToReconstructions.ipynb
-	\animategraphics[autoplay,palindrome,height=\imageheight,every=\everyframe]{24}{./movies/scan/reconstructions/KP-TNIKWT02_240_reconstructions_of_556_800_px_}{000}{277}
+	\mode<beamer>{\animategraphics[autoplay,palindrome,height=\imheight,every=\everyframe]{24}{./movies/scan/reconstructions/KP-TNIKWT02_240_reconstructions_of_556_800_px_}{000}{277}}
+	\mode<handout>{\includegraphics[height=\imheight]{./movies/scan/reconstructions/KP-TNIKWT02_240_reconstructions_of_556_800_px_100}}
+
 \end{frame}
 
 \begin{frame}
@@ -363,7 +366,8 @@
 	\frametitle{Visualization}
 	\begin{tikzpicture}[remember picture,overlay]%
 	\node at (current page.center){%
-		\animategraphics[autoplay,loop,height=\paperheight,every=\everyframe]{24}{./movies/scan/visualization/lung}{000}{240}%
+		\mode<beamer>{\animategraphics[autoplay,loop,height=\paperheight,every=\everyframe]{24}{./movies/scan/visualization/lung}{000}{240}}%
+		\mode<handout>{\includegraphics[height=\paperheight]{./movies/scan/visualization/lung000}}%
 		};%
 	\end{tikzpicture}%
 \end{frame}
@@ -486,14 +490,29 @@
 	\frametitle{Extraction of root canal space}
 	\begin{tikzpicture}[remember picture,overlay]%
 	\node at (current page.center) [shift={(0,-25pt)}]{%
-		\only<1>{%
-			\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices/image0}{000}{473}%
+		\only<1|handout:0>{%
+			\mode<beamer>{%
+				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices/image0}{000}{473}%
+				}%
+			\mode<handout>{%
+				\includegraphics[width=\paperwidth]{./movies/tooth045/transparent-slices/image0000}%
+				}%
 			}%
-		\only<2>{%
+		\only<2|handout:1>{%
+			\mode<beamer>{%
 				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/transparent-slices-rcs/image0}{000}{457}%
+				}%
+			\mode<handout>{%
+				\includegraphics[width=\paperwidth]{./movies/tooth045/transparent-slices-rcs/image0000}%
+				}%
 			}%
-		\only<3>{%
+		\only<3|handout:0>{%
+			\mode<beamer>{%
 				\animategraphics[autoplay,loop,width=\paperwidth,every=\everyframe]{24}{./movies/tooth045/rcs/image0}{000}{413}%
+				}%
+			\mode<handout>{%
+				\includegraphics[width=\paperwidth]{./movies/tooth045/rcs/image0000}%
+				}%
 			}%
 		};%
 	\end{tikzpicture}%
